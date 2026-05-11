@@ -3,16 +3,11 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X, Lock, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-interface NavbarProps {
-  onCotizar: () => void;
-  onPortalSocios: () => void;
-}
+const NAVBAR_HEIGHT = 70;
 
 const navLinks = [
   { label: 'Inicio', href: '/' },
@@ -23,128 +18,207 @@ const navLinks = [
   { label: 'Contacto', href: '/contacto' },
 ];
 
+interface NavbarProps {
+  onCotizar: () => void;
+  onPortalSocios: () => void;
+}
+
 export default function Navbar({ onCotizar, onPortalSocios }: NavbarProps) {
-  const scrolled = true;
   const pathname = usePathname();
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [scrolledState, setScrolledState] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolledState(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 30);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  /* Lock body scroll when drawer is open */
+  useEffect(() => {
+    if (drawerOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [drawerOpen]);
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';
     return pathname.startsWith(href);
   };
 
+  const closeDrawer = () => setDrawerOpen(false);
+
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolledState
-          ? 'bg-emerald-dark/95 backdrop-blur-md shadow-lg py-2'
-          : 'bg-emerald-dark/80 backdrop-blur-sm py-4'
-      }`}
-    >
-      <nav className="container mx-auto px-4 md:px-6 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex flex-col items-start group">
-          <span className="font-heading font-extrabold text-xl md:text-2xl tracking-wide text-gold group-hover:text-gold-light transition-colors">
-            GINCANAS
-          </span>
-          <span className="text-[10px] md:text-xs text-white/80 tracking-[0.2em] uppercase -mt-1">
-            Clubes Campestres
-          </span>
-        </Link>
+    <>
+      <header
+        style={{ height: NAVBAR_HEIGHT }}
+        className={cn(
+          'fixed top-0 left-0 right-0 z-50 transition-all duration-300 navbar-glass',
+          scrolled && 'scrolled'
+        )}
+      >
+        <nav
+          style={{ height: NAVBAR_HEIGHT }}
+          className="max-w-7xl mx-auto px-5 md:px-8 flex items-center justify-between w-full"
+        >
+          {/* Logo */}
+          <Link href="/" className="flex flex-col items-start group flex-shrink-0 z-10">
+            <span className="font-heading font-extrabold text-lg md:text-2xl tracking-wide text-gold group-hover:text-gold-light transition-colors leading-none">
+              GINCANAS
+            </span>
+            <span className="text-[9px] md:text-[10px] text-white/70 tracking-[0.22em] uppercase leading-none mt-0.5">
+              Clubes Campestres
+            </span>
+          </Link>
 
-        {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center gap-1">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                'text-sm font-medium tracking-wide px-3 py-2 rounded-lg transition-all duration-200',
-                isActive(link.href)
-                  ? 'text-gold bg-white/10'
-                  : 'text-white/80 hover:text-gold hover:bg-white/5'
-              )}
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center gap-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  'text-[13px] font-medium tracking-wide px-3 py-2 rounded-lg transition-all duration-200',
+                  isActive(link.href)
+                    ? 'text-gold bg-white/10'
+                    : 'text-white/75 hover:text-gold hover:bg-white/5'
+                )}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+
+          {/* Desktop CTAs */}
+          <div className="hidden lg:flex items-center gap-3">
+            <button
+              onClick={onPortalSocios}
+              className="text-[13px] text-white/75 hover:text-gold transition-colors duration-200 font-medium"
             >
-              {link.label}
-            </Link>
-          ))}
-        </div>
+              Portal Socios
+            </button>
+            <button
+              onClick={onCotizar}
+              className="btn-touch bg-gold hover:bg-gold-dark text-emerald-dark font-semibold text-[13px] px-5 rounded-lg transition-all duration-200 h-10"
+            >
+              Cotizar Ahora
+            </button>
+          </div>
 
-        {/* Desktop CTAs */}
-        <div className="hidden lg:flex items-center gap-3">
+          {/* Mobile Hamburger */}
           <button
-            onClick={onPortalSocios}
-            className="text-sm text-white/80 hover:text-gold transition-colors duration-200 font-medium"
+            onClick={() => setDrawerOpen(true)}
+            className="lg:hidden w-10 h-10 flex items-center justify-center text-white z-10"
+            aria-label="Abrir menú"
           >
-            Portal Socios
+            <Menu className="w-6 h-6" strokeWidth={2} />
           </button>
-          <Button
-            onClick={onCotizar}
-            className="bg-gold hover:bg-gold-dark text-emerald-dark font-semibold text-sm px-5 transition-all duration-200"
-          >
-            Cotizar Ahora
-          </Button>
-        </div>
+        </nav>
+      </header>
 
-        {/* Mobile Menu */}
-        <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-          <SheetTrigger asChild className="lg:hidden">
-            <Button variant="ghost" size="icon" className="text-white">
-              <Menu className="h-6 w-6" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="right" className="w-[300px] bg-emerald-dark border-emerald-deep">
-            <SheetTitle className="sr-only">Menú de Navegación</SheetTitle>
-            <div className="flex flex-col gap-6 mt-8">
-              <div className="mb-4">
-                <span className="font-heading font-extrabold text-2xl text-gold">GINCANAS</span>
-                <p className="text-xs text-white/60 tracking-[0.2em] uppercase">Clubes Campestres</p>
-              </div>
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className={cn(
-                    'text-left text-lg font-medium transition-colors py-1',
-                    isActive(link.href)
-                      ? 'text-gold'
-                      : 'text-white/90 hover:text-gold'
-                  )}
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <div className="border-t border-white/10 pt-4 flex flex-col gap-3">
-                <button
-                  onClick={() => { onPortalSocios(); setMobileOpen(false); }}
-                  className="text-left text-white/80 hover:text-gold transition-colors font-medium"
-                >
-                  Portal Socios
-                </button>
-                <Button
-                  onClick={() => { onCotizar(); setMobileOpen(false); }}
-                  className="bg-gold hover:bg-gold-dark text-emerald-dark font-semibold w-full"
-                >
-                  Cotizar Ahora
-                </Button>
-              </div>
+      {/* Mobile Drawer Overlay */}
+      <AnimatePresence>
+        {drawerOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="drawer-overlay fixed inset-0 z-[60]"
+            onClick={closeDrawer}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Mobile Drawer Panel */}
+      <AnimatePresence>
+        {drawerOpen && (
+          <motion.div
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: 'spring', damping: 28, stiffness: 300 }}
+            className="fixed top-0 right-0 bottom-0 z-[70] w-[85vw] max-w-[360px] bg-emerald-dark flex flex-col"
+          >
+            {/* Drawer Header */}
+            <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-white/10">
+              <Link href="/" onClick={closeDrawer} className="flex flex-col items-start">
+                <span className="font-heading font-extrabold text-xl text-gold leading-none">GINCANAS</span>
+                <span className="text-[9px] text-white/50 tracking-[0.22em] uppercase mt-0.5">Clubes Campestres</span>
+              </Link>
+              <button
+                onClick={closeDrawer}
+                className="w-10 h-10 flex items-center justify-center text-white/70 hover:text-white transition-colors rounded-lg hover:bg-white/5"
+                aria-label="Cerrar menú"
+              >
+                <X className="w-5 h-5" strokeWidth={2.5} />
+              </button>
             </div>
-          </SheetContent>
-        </Sheet>
-      </nav>
-    </motion.header>
+
+            {/* Drawer Links */}
+            <div className="flex-1 overflow-y-auto py-4 px-6">
+              <nav className="flex flex-col">
+                {navLinks.map((link, idx) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={closeDrawer}
+                    className={cn(
+                      'flex items-center h-[55px] text-[1.1rem] font-semibold tracking-wide transition-colors border-b border-white/[0.06]',
+                      isActive(link.href)
+                        ? 'text-gold'
+                        : 'text-white/[0.92] hover:text-gold'
+                    )}
+                    style={{ animationDelay: `${idx * 40}ms` }}
+                  >
+                    {link.label}
+                    {isActive(link.href) && (
+                      <span className="ml-auto w-1.5 h-1.5 rounded-full bg-gold" />
+                    )}
+                  </Link>
+                ))}
+              </nav>
+            </div>
+
+            {/* Drawer Footer */}
+            <div className="px-6 pb-6 pt-4 border-t border-white/10 space-y-3">
+              {/* Portal Socios VIP */}
+              <button
+                onClick={() => { onPortalSocios(); closeDrawer(); }}
+                className="w-full flex items-center justify-center gap-2 h-[48px] text-white/80 hover:text-gold text-[0.95rem] font-medium transition-colors border border-white/10 rounded-lg hover:border-white/20"
+              >
+                <Lock className="w-4 h-4" />
+                Portal Socios
+              </button>
+
+              {/* CTA Dorado */}
+              <button
+                onClick={() => { onCotizar(); closeDrawer(); }}
+                className="w-full flex items-center justify-center h-[52px] bg-gold hover:bg-gold-dark text-emerald-dark font-bold text-[0.95rem] rounded-lg transition-all duration-200 shadow-lg shadow-gold/20"
+              >
+                Cotizar Ahora
+              </button>
+
+              {/* WhatsApp Directo */}
+              <a
+                href="https://wa.me/51921451844?text=%C2%A1Hola!%20%E2%91%8B%20Vengo%20de%20la%20web%20y%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20la%20*GESTI%C3%93N%20DE%20EVENTOS%20DE%20ALTO%20IMPACTO*.%20%F0%9F%8F%9B%EF%B8%8F%E2%9C%A8%0APor%20favor%2C%20%C2%BFpodr%C3%ADan%20enviarme%20su%20cat%C3%A1logo%20de%20clubs%20exclusivos?%20Gracias."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex items-center justify-center gap-2 h-[48px] bg-whatsapp hover:bg-green-600 text-white font-semibold text-[0.95rem] rounded-lg transition-all duration-200"
+              >
+                <MessageCircle className="w-4 h-4" />
+                WhatsApp Directo
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Spacer for fixed navbar */}
+      <div style={{ height: NAVBAR_HEIGHT }} className="w-full" />
+    </>
   );
 }

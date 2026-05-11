@@ -50,6 +50,7 @@
   --color-emerald-light: #E8F5E9;
   --color-corporate-text: #1A1A2E;
   --color-corporate-gray: #F5F5F5;
+  --color-whatsapp: #25D366;
 }
 
 :root {
@@ -88,14 +89,24 @@
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
   }
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    @apply bg-background text-foreground;
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0;
+    padding: 0;
   }
 }
 
@@ -141,4 +152,48 @@
 .hero-pattern {
   background-image: radial-gradient(circle at 25% 25%, rgba(200, 169, 81, 0.1) 0%, transparent 50%),
     radial-gradient(circle at 75% 75%, rgba(4, 106, 56, 0.1) 0%, transparent 50%);
+}
+
+/* Glassmorphism navbar */
+.navbar-glass {
+  background: rgba(2, 61, 33, 0.82);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid rgba(200, 169, 81, 0.1);
+}
+
+.navbar-glass.scrolled {
+  background: rgba(2, 61, 33, 0.95);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Mobile drawer overlay */
+.drawer-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Premium readability */
+.prose-corporate {
+  line-height: 1.7;
+  max-width: 65ch;
+  color: rgba(26, 26, 46, 0.72);
+}
+
+/* Minimum touch target for accessibility */
+.btn-touch {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* WhatsApp pulse animation */
+@keyframes wa-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5); }
+  50% { box-shadow: 0 0 0 12px rgba(37, 211, 102, 0); }
+}
+.wa-btn-pulse {
+  animation: wa-pulse 2s infinite;
 }
