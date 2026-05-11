@@ -1,10 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
+import { cn } from '@/lib/utils';
 
 interface NavbarProps {
   onCotizar: () => void;
@@ -12,32 +15,31 @@ interface NavbarProps {
 }
 
 const navLinks = [
-  { label: 'Inicio', href: 'inicio' },
-  { label: 'Nosotros', href: 'nosotros' },
-  { label: 'Clubes', href: 'clubes' },
-  { label: 'Paseos Escolares', href: 'paseos' },
-  { label: 'Servicios', href: 'servicios' },
-  { label: 'Contacto', href: 'contacto' },
+  { label: 'Inicio', href: '/' },
+  { label: 'Nosotros', href: '/nosotros' },
+  { label: 'Clubes', href: '/clubes' },
+  { label: 'Paseos Escolares', href: '/paseos-escolares' },
+  { label: 'Servicios', href: '/servicios' },
+  { label: 'Contacto', href: '/contacto' },
 ];
 
 export default function Navbar({ onCotizar, onPortalSocios }: NavbarProps) {
-  const [scrolled, setScrolled] = useState(false);
+  const scrolled = true;
+  const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolledState, setScrolledState] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      setScrolledState(window.scrollY > 50);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollTo = (id: string) => {
-    setMobileOpen(false);
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+  const isActive = (href: string) => {
+    if (href === '/') return pathname === '/';
+    return pathname.startsWith(href);
   };
 
   return (
@@ -46,35 +48,37 @@ export default function Navbar({ onCotizar, onPortalSocios }: NavbarProps) {
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
+        scrolledState
           ? 'bg-emerald-dark/95 backdrop-blur-md shadow-lg py-2'
-          : 'bg-transparent py-4'
+          : 'bg-emerald-dark/80 backdrop-blur-sm py-4'
       }`}
     >
       <nav className="container mx-auto px-4 md:px-6 flex items-center justify-between">
         {/* Logo */}
-        <button
-          onClick={() => scrollTo('inicio')}
-          className="flex flex-col items-start"
-        >
-          <span className="font-heading font-extrabold text-xl md:text-2xl tracking-wide text-gold">
+        <Link href="/" className="flex flex-col items-start group">
+          <span className="font-heading font-extrabold text-xl md:text-2xl tracking-wide text-gold group-hover:text-gold-light transition-colors">
             GINCANAS
           </span>
           <span className="text-[10px] md:text-xs text-white/80 tracking-[0.2em] uppercase -mt-1">
             Clubes Campestres
           </span>
-        </button>
+        </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center gap-6">
+        <div className="hidden lg:flex items-center gap-1">
           {navLinks.map((link) => (
-            <button
+            <Link
               key={link.href}
-              onClick={() => scrollTo(link.href)}
-              className="text-sm text-white/80 hover:text-gold transition-colors duration-200 font-medium tracking-wide"
+              href={link.href}
+              className={cn(
+                'text-sm font-medium tracking-wide px-3 py-2 rounded-lg transition-all duration-200',
+                isActive(link.href)
+                  ? 'text-gold bg-white/10'
+                  : 'text-white/80 hover:text-gold hover:bg-white/5'
+              )}
             >
               {link.label}
-            </button>
+            </Link>
           ))}
         </div>
 
@@ -109,13 +113,19 @@ export default function Navbar({ onCotizar, onPortalSocios }: NavbarProps) {
                 <p className="text-xs text-white/60 tracking-[0.2em] uppercase">Clubes Campestres</p>
               </div>
               {navLinks.map((link) => (
-                <button
+                <Link
                   key={link.href}
-                  onClick={() => scrollTo(link.href)}
-                  className="text-left text-lg text-white/90 hover:text-gold transition-colors font-medium"
+                  href={link.href}
+                  onClick={() => setMobileOpen(false)}
+                  className={cn(
+                    'text-left text-lg font-medium transition-colors py-1',
+                    isActive(link.href)
+                      ? 'text-gold'
+                      : 'text-white/90 hover:text-gold'
+                  )}
                 >
                   {link.label}
-                </button>
+                </Link>
               ))}
               <div className="border-t border-white/10 pt-4 flex flex-col gap-3">
                 <button

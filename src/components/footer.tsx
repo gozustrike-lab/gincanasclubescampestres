@@ -1,11 +1,12 @@
 'use client';
 
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import {
   Facebook, Instagram, Linkedin, Youtube, Mail, Phone, MapPin,
-  ArrowRight, ExternalLink,
+  ArrowRight,
 } from 'lucide-react';
 
 interface FooterProps {
@@ -13,12 +14,12 @@ interface FooterProps {
 }
 
 const quickLinks = [
-  { label: 'Inicio', href: 'inicio' },
-  { label: 'Nosotros', href: 'nosotros' },
-  { label: 'Clubes', href: 'clubes' },
-  { label: 'Paseos Escolares', href: 'paseos' },
-  { label: 'Servicios', href: 'servicios' },
-  { label: 'Contacto', href: 'contacto' },
+  { label: 'Inicio', href: '/' },
+  { label: 'Nosotros', href: '/nosotros' },
+  { label: 'Clubes', href: '/clubes' },
+  { label: 'Paseos Escolares', href: '/paseos-escolares' },
+  { label: 'Servicios', href: '/servicios' },
+  { label: 'Contacto', href: '/contacto' },
 ];
 
 const services = [
@@ -38,11 +39,6 @@ const socialLinks = [
 ];
 
 export default function Footer({ onCotizar }: FooterProps) {
-  const scrollTo = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-
   return (
     <footer className="bg-emerald-dark text-white">
       {/* Newsletter bar */}
@@ -73,11 +69,11 @@ export default function Footer({ onCotizar }: FooterProps) {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <div className="mb-4">
+            <Link href="/" className="mb-4 inline-block">
               <span className="font-heading font-extrabold text-2xl text-gold">GINCANAS</span>
               <p className="text-xs text-white/50 tracking-[0.2em] uppercase">Clubes Campestres</p>
-            </div>
-            <p className="text-sm text-white/60 leading-relaxed mb-4">
+            </Link>
+            <p className="text-sm text-white/60 leading-relaxed mb-4 mt-3">
               Líderes en gestión de eventos de alto impacto para instituciones élite en Perú.
               8 clubes exclusivos, 15+ años de excelencia.
             </p>
@@ -100,13 +96,13 @@ export default function Footer({ onCotizar }: FooterProps) {
             <ul className="space-y-2.5">
               {quickLinks.map((link) => (
                 <li key={link.href}>
-                  <button
-                    onClick={() => scrollTo(link.href)}
+                  <Link
+                    href={link.href}
                     className="text-sm text-white/60 hover:text-gold transition-colors flex items-center gap-1.5"
                   >
                     <ArrowRight className="h-3 w-3" />
                     {link.label}
-                  </button>
+                  </Link>
                 </li>
               ))}
             </ul>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import SiteLayout from "@/components/site-layout";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -17,7 +18,10 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Gincanas Clubes Campestres — Gestión de Eventos de Alto Impacto",
+  title: {
+    default: "Gincanas Clubes Campestres — Gestión de Eventos de Alto Impacto",
+    template: "%s — Gincanas Clubes Campestres",
+  },
   description:
     "Más de 15 años conectando a las mejores organizaciones con nuestros 8 clubes campestres exclusivos. Seguridad, logística integral y experiencias inolvidables para corporativos, universidades y colegios.",
   keywords: [
@@ -156,7 +160,7 @@ const jsonLdEventVenue = {
   name: "Gincanas Clubes Campestres - Red de Clubes",
   description:
     "8 clubes campestres exclusivos para eventos corporativos, educativos y sociales en Perú.",
-  url: "https://gincanasclubescampestres.com/#clubes",
+  url: "https://gincanasclubescampestres.com/clubes",
   address: [
     {
       "@type": "PostalAddress",
@@ -200,11 +204,11 @@ const jsonLdBreadcrumb = {
   "@type": "BreadcrumbList",
   itemListElement: [
     { "@type": "ListItem", position: 1, name: "Inicio", item: "https://gincanasclubescampestres.com" },
-    { "@type": "ListItem", position: 2, name: "Nosotros", item: "https://gincanasclubescampestres.com/#nosotros" },
-    { "@type": "ListItem", position: 3, name: "Clubes", item: "https://gincanasclubescampestres.com/#clubes" },
-    { "@type": "ListItem", position: 4, name: "Paseos Escolares", item: "https://gincanasclubescampestres.com/#paseos" },
-    { "@type": "ListItem", position: 5, name: "Servicios", item: "https://gincanasclubescampestres.com/#servicios" },
-    { "@type": "ListItem", position: 6, name: "Contacto", item: "https://gincanasclubescampestres.com/#contacto" },
+    { "@type": "ListItem", position: 2, name: "Nosotros", item: "https://gincanasclubescampestres.com/nosotros" },
+    { "@type": "ListItem", position: 3, name: "Clubes", item: "https://gincanasclubescampestres.com/clubes" },
+    { "@type": "ListItem", position: 4, name: "Paseos Escolares", item: "https://gincanasclubescampestres.com/paseos-escolares" },
+    { "@type": "ListItem", position: 5, name: "Servicios", item: "https://gincanasclubescampestres.com/servicios" },
+    { "@type": "ListItem", position: 6, name: "Contacto", item: "https://gincanasclubescampestres.com/contacto" },
   ],
 };
 
@@ -292,7 +296,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${montserrat.variable} antialiased bg-background text-foreground`}
       >
-        {children}
+        <SiteLayout>{children}</SiteLayout>
         <Toaster />
       </body>
     </html>
