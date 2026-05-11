@@ -7,8 +7,6 @@ import {
   Target, Zap, Users, ArrowRight, CheckCircle2,
   Palette, Route
 } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
 
 /* WhatsApp pre-filled URLs */
 const WA_GINCANAS = 'https://wa.me/51921451844?text=Hola%2C%20me%20interesa%20el%20servicio%20de%20*GINCANAS%20CORPORATIVAS%20Y%20TEAM%20BUILDING*.%20%F0%9F%A4%9D%F0%9F%8F%86%0ABuscamos%20una%20experiencia%20de%20integraci%C3%B3n%20para%20nuestra%20empresa.%20%C2%BFPodr%C3%ADan%20detallarme%20las%20din%C3%A1micas%20y%20coberturas%3F';
@@ -20,13 +18,13 @@ const services = [
     title: 'Gincanas Profesionales',
     tagline: 'Team Building & Experiencias Corporativas',
     description:
-      'Diseñamos gincanas temáticas de alto impacto que fortalecen los vínculos entre equipos, fomentan el liderazgo y generan experiencias memorables para su organización.',
+      'Diseñamos gincanas temáticas de alto impacto que fortalecen los vínculos entre equipos, fomentan el liderazgo y generan experiencias memorables para su organización. Cada actividad es personalizada según los objetivos estratégicos de su empresa, con mediciones de resultado y cobertura fotográfica profesional incluida.',
     features: [
-      'Team Building personalizado por sector',
-      'Gincanas de competencia corporativa',
-      'Eventos de integración con gamificación',
-      'Dinámicas de liderazgo y creatividad',
-      'Coordinadores profesionales especializados',
+      'Team Building personalizado por sector industrial',
+      'Gincanas de competencia corporativa con gamificación',
+      'Eventos de integración con dinámicas de liderazgo',
+      'Coordinadores profesionales especializados por taller',
+      'Reporte de resultados con métricas de impacto',
     ],
     extras: [
       { icon: Target, label: 'Objetivos Medibles' },
@@ -34,7 +32,6 @@ const services = [
       { icon: Camera, label: 'Cobertura Fotográfica' },
     ],
     color: 'emerald',
-    gradient: 'from-emerald-deep to-emerald-deep/80',
     waLink: WA_GINCANAS,
   },
   {
@@ -42,13 +39,13 @@ const services = [
     title: 'Flota de Transporte Turístico de Lujo',
     tagline: 'Movilidad Premium con Seguridad Integral',
     description:
-      'Nuestra flota de buses turísticos de última generación garantiza comodidad, seguridad y estilo en cada traslado. Conductores profesionales y seguros de viaje completos.',
+      'Nuestra flota de buses turísticos de última generación garantiza comodidad, seguridad y estilo en cada traslado. Conductores profesionales certificados, seguro de pasajeros completo y monitoreo GPS en tiempo real para la tranquilidad absoluta de nuestros clientes corporativos.',
     features: [
-      'Buses premium con aire acondicionado',
-      'Conductores profesionales certificados',
-      'Seguro de pasajeros completo',
-      'GPS y monitoreo en tiempo real',
-      'Asientos reclinables y entretenimiento',
+      'Buses premium con aire acondicionado y WiFi',
+      'Conductores profesionales certificados ISO',
+      'Seguro de pasajeros completo por viaje',
+      'GPS y monitoreo satelital en tiempo real',
+      'Asientos reclinables y entretenimiento a bordo',
     ],
     extras: [
       { icon: Route, label: 'Rutas Optimizadas' },
@@ -56,18 +53,17 @@ const services = [
       { icon: Zap, label: 'Disponibilidad 24/7' },
     ],
     color: 'gold',
-    gradient: 'from-gold to-gold/80',
     waLink: WA_TRANSPORTE,
   },
 ];
 
 const ecosystem = [
-  { icon: Trophy, label: 'Gincanas', pos: 'top' },
-  { icon: Bus, label: 'Transporte', pos: 'right' },
-  { icon: UtensilsCrossed, label: 'Catering', pos: 'bottom' },
-  { icon: Camera, label: 'Fotografía', pos: 'left' },
-  { icon: Music, label: 'Audio/Video', pos: 'top' },
-  { icon: CheckCircle2, label: 'Coordinación', pos: 'right' },
+  { icon: Trophy, label: 'Gincanas' },
+  { icon: Bus, label: 'Transporte' },
+  { icon: UtensilsCrossed, label: 'Catering' },
+  { icon: Camera, label: 'Fotografía' },
+  { icon: Music, label: 'Audio/Video' },
+  { icon: CheckCircle2, label: 'Coordinación' },
 ];
 
 export default function ServiciosSection() {
@@ -84,122 +80,148 @@ export default function ServiciosSection() {
           transition={{ duration: 0.6 }}
           className="text-center max-w-3xl mx-auto mb-12 md:mb-16"
         >
-          <Badge variant="secondary" className="bg-emerald-light text-emerald-deep font-medium mb-4">
+          <span className="inline-flex items-center gap-2 bg-emerald-light text-emerald-deep font-medium text-sm mb-4 px-4 py-2">
             Servicios Complementarios
-          </Badge>
+          </span>
           <h2 className="font-heading font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-emerald-dark mb-5">
             El Ecosistema de Servicios{' '}
-            <span className="text-gold">Gincanas</span>
+            <span className="text-gold-gradient">Gincanas</span>
           </h2>
-          <p className="text-corporate-text/70 text-base md:text-lg">
+          <p className="text-corporate-text/70 text-base md:text-lg leading-relaxed">
             Más allá de nuestros clubes, ofrecemos un ecosistema integral de servicios
             que convierte cada evento en una experiencia completa y sin preocupaciones.
           </p>
         </motion.div>
 
-        {/* Service Cards */}
-        <div className="grid lg:grid-cols-2 gap-6 md:gap-8 mb-12 md:mb-16">
+        {/* Service Cards — equal height grid */}
+        <div className="grid lg:grid-cols-2 gap-6 md:gap-8 mb-12 md:mb-16 items-stretch">
           {services.map((service, i) => (
             <motion.div
               key={service.title}
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.2 + i * 0.2 }}
+              className="h-full"
             >
-              <Card className="card-premium overflow-hidden border border-border h-full">
-                <div className={`h-3 bg-gradient-to-r ${service.gradient}`} />
-                <CardContent className="p-5 md:p-8">
+              <div className="card-corporate bg-white h-full flex flex-col overflow-hidden border border-border/60">
+                {/* Gold gradient top border */}
+                <div className="h-[3px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+
+                <div className="p-5 md:p-8 flex flex-col flex-1">
                   <div className="flex items-start gap-3 md:gap-4 mb-5">
-                    <div className={`w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                    <div className={`w-12 h-12 md:w-14 md:h-14 flex items-center justify-center flex-shrink-0 ${
                       service.color === 'emerald' ? 'bg-emerald-light' : 'bg-gold/10'
                     }`}>
                       <service.icon className={`h-6 w-6 md:h-7 md:w-7 ${
                         service.color === 'emerald' ? 'text-emerald-deep' : 'text-gold-dark'
                       }`} />
                     </div>
-                    <div>
-                      <h3 className="font-heading font-bold text-lg md:text-xl text-emerald-dark">
+                    <div className="min-w-0">
+                      <h3 className="font-heading font-bold text-lg md:text-xl text-emerald-dark leading-tight">
                         {service.title}
                       </h3>
-                      <p className="text-xs md:text-sm text-corporate-text/50">{service.tagline}</p>
+                      <p className="text-xs md:text-sm text-corporate-text/50 mt-0.5">{service.tagline}</p>
                     </div>
                   </div>
 
-                  <p className="text-corporate-text/70 leading-relaxed text-sm md:text-base mb-5">{service.description}</p>
+                  <p className="text-corporate-text/70 leading-relaxed text-sm md:text-base mb-5 flex-1">
+                    {service.description}
+                  </p>
 
-                  <div className="space-y-2.5 mb-5">
+                  {/* Feature list with SVG check icons */}
+                  <div className="space-y-2.5 mb-6">
                     {service.features.map((feature) => (
                       <div key={feature} className="flex items-start gap-2.5">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-deep mt-0.5 flex-shrink-0" />
+                        <svg
+                          className="h-[18px] w-[18px] text-emerald-deep mt-0.5 flex-shrink-0"
+                          viewBox="0 0 18 18"
+                          fill="none"
+                        >
+                          <circle cx="9" cy="9" r="9" fill="#ecfdf5" />
+                          <path
+                            d="M5.5 9L7.8 11.3L12.5 6.6"
+                            stroke="#064e3b"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
                         <span className="text-sm text-corporate-text/70">{feature}</span>
                       </div>
                     ))}
                   </div>
 
-                  <div className="flex flex-wrap gap-2 mb-5">
+                  {/* Tags with subtle gray bg */}
+                  <div className="flex flex-wrap gap-2.5 mb-6">
                     {service.extras.map((extra) => (
-                      <Badge
-                        key={extra.label}
-                        variant="outline"
-                        className={`text-xs ${
-                          service.color === 'emerald'
-                            ? 'border-emerald-deep/20 text-emerald-dark/70 bg-emerald-light/20'
-                            : 'border-gold/30 text-gold-dark bg-gold/5'
-                        }`}
-                      >
-                        <extra.icon className="h-3 w-3 mr-1" />
+                      <span key={extra.label} className="tag-pill">
+                        <extra.icon className="h-3.5 w-3.5 text-emerald-deep/60" />
                         {extra.label}
-                      </Badge>
+                      </span>
                     ))}
                   </div>
 
+                  {/* CTA — bigger padding, gold solid hover, arrow animation */}
                   <a
                     href={service.waLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`btn-touch w-full font-semibold rounded-lg text-sm md:text-base flex items-center justify-center gap-2 transition-all duration-200 ${
+                    className={`group btn-touch w-full font-semibold text-sm md:text-base flex items-center justify-center gap-2 transition-all duration-200 rounded ${
                       service.color === 'emerald'
-                        ? 'border-emerald-deep border text-emerald-dark hover:bg-emerald-deep hover:text-white'
-                        : 'border-gold border text-gold-dark hover:bg-gold hover:text-emerald-dark'
+                        ? 'border border-emerald-deep text-emerald-dark hover:bg-emerald-deep hover:text-white'
+                        : 'border border-gold text-gold-dark hover:bg-gold hover:text-emerald-dark'
                     }`}
                   >
-                    Solicitar Información <ArrowRight className="h-4 w-4" />
+                    Solicitar Información
+                    <ArrowRight className="h-4 w-4 cta-arrow" />
                   </a>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </motion.div>
           ))}
         </div>
 
-        {/* Ecosystem Diagram */}
+        {/* Ecosystem Diagram — minimalist with connecting line icons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.6 }}
-          className="max-w-md mx-auto"
+          className="max-w-lg mx-auto"
         >
-          <h3 className="font-heading font-bold text-lg md:text-xl text-center text-emerald-dark mb-6 md:mb-8">
+          <h3 className="font-heading font-bold text-lg md:text-xl text-center text-emerald-dark mb-8">
             Ecosistema Integrado
           </h3>
           <div className="relative">
-            <div className="flex justify-center mb-6">
-              <div className="w-20 h-20 md:w-24 md:h-24 bg-emerald-dark rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-deep/20">
+            {/* Central hub */}
+            <div className="flex justify-center mb-8">
+              <div className="w-20 h-20 md:w-24 md:h-24 bg-emerald-dark flex items-center justify-center shadow-lg shadow-emerald-deep/15 relative">
                 <Trophy className="h-8 w-8 md:h-10 md:w-10 text-gold" />
+                {/* Connecting lines radiating out */}
+                <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-px h-6 bg-gradient-to-b from-transparent to-gold/30" />
+                <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-px h-6 bg-gradient-to-t from-transparent to-gold/30" />
+                <div className="absolute top-1/2 -left-6 -translate-y-1/2 w-6 h-px bg-gradient-to-r from-transparent to-gold/30" />
+                <div className="absolute top-1/2 -right-6 -translate-y-1/2 w-6 h-px bg-gradient-to-l from-transparent to-gold/30" />
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-2.5 md:gap-3">
-              {ecosystem.map((item) => (
-                <div
+
+            {/* Service grid */}
+            <div className="grid grid-cols-3 gap-3 md:gap-4">
+              {ecosystem.map((item, idx) => (
+                <motion.div
                   key={item.label}
-                  className="bg-white rounded-xl p-2.5 md:p-3 text-center border border-border card-premium"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                  transition={{ duration: 0.4, delay: 0.7 + idx * 0.08 }}
+                  className="bg-white p-3 md:p-4 text-center border border-border/50 card-corporate group hover:border-gold/30 transition-colors"
                 >
-                  <item.icon className="h-5 w-5 text-emerald-deep mx-auto mb-1" />
-                  <span className="text-[10px] md:text-xs font-medium text-corporate-text/70">{item.label}</span>
-                </div>
+                  <item.icon className="h-5 w-5 text-emerald-deep mx-auto mb-1.5 group-hover:text-gold transition-colors" />
+                  <span className="text-[10px] md:text-xs font-medium text-corporate-text/60">{item.label}</span>
+                </motion.div>
               ))}
             </div>
-            <p className="text-center text-[10px] md:text-xs text-corporate-text/40 mt-3 md:mt-4">
-              Todos los servicios se conectan para una experiencia sin fricciones
+
+            <p className="text-center text-[10px] md:text-xs text-corporate-text/40 mt-5 tracking-wide">
+              Todos los servicios se integran para una experiencia sin fricciones
             </p>
           </div>
         </motion.div>

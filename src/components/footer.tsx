@@ -46,8 +46,8 @@ export default function Footer({ onCotizar }: FooterProps) {
         <div className="container mx-auto px-4 md:px-6 py-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div>
-              <h3 className="font-heading font-bold text-lg">Manténgase Informado</h3>
-              <p className="text-sm text-white/60">Reciba novedades y ofertas exclusivas de nuestra red de clubes.</p>
+              <h3 className="font-heading font-bold text-lg">Suscríbase a nuestro Reporte de Tendencias en Eventos Corporativos</h3>
+              <p className="text-sm text-white/60">Análisis trimestral del sector, mejores prácticas y novedades de nuestra red de clubes exclusivos.</p>
             </div>
             <div className="flex gap-2 w-full md:w-auto">
               <Input
@@ -55,7 +55,7 @@ export default function Footer({ onCotizar }: FooterProps) {
                 placeholder="su@email.com"
                 className="bg-white/10 border-white/20 text-white placeholder:text-white/40 max-w-xs focus-visible:ring-gold/30"
               />
-              <Button className="bg-gold hover:bg-gold-dark text-emerald-dark font-semibold flex-shrink-0">
+              <Button className="bg-gold hover:bg-gold-dark text-emerald-dark font-semibold flex-shrink-0 rounded" style={{ borderRadius: '4px' }}>
                 <Mail className="h-4 w-4 mr-2" />
                 Suscribir
               </Button>
@@ -74,8 +74,8 @@ export default function Footer({ onCotizar }: FooterProps) {
               <p className="text-xs text-white/50 tracking-[0.2em] uppercase">Clubes Campestres</p>
             </Link>
             <p className="text-sm text-white/60 leading-relaxed mb-4 mt-3">
-              Líderes en gestión de eventos de alto impacto para instituciones élite en Perú.
-              8 clubes exclusivos, 15+ años de excelencia.
+              Referente en gestión de eventos de alto impacto para corporaciones y universidades de primer nivel en Perú.
+              8 clubes exclusivos, 15+ años de trayectoria institucional.
             </p>
             <div className="flex gap-3">
               {socialLinks.map((social) => (

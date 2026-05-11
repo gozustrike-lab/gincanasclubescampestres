@@ -80,7 +80,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
         >
           <MessageCircle className="w-5 h-5 text-white" strokeWidth={2.5} />
           <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 whitespace-nowrap bg-emerald-dark text-white text-xs font-medium px-3 py-1.5 rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-            WhatsApp Directo
+            Hablar con un Ejecutivo de Cuentas
           </span>
         </a>
       </div>
