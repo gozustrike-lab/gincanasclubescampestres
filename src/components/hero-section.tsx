@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { ChevronDown, Users, MapPin, Clock, Award } from 'lucide-react';
@@ -67,10 +68,15 @@ export default function HeroSection({ onCotizar }: HeroSectionProps) {
       id="inicio"
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Background Image + Gradient Overlay */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/images/hero-bg.png')" }}
+      {/* Background Image + Gradient Overlay — Priority: loaded immediately */}
+      <Image
+        src="/images/hero-bg.webp"
+        alt="Vista aérea de club campestres exclusivo con piscinas y áreas de eventos rodeadas de vegetación verde"
+        fill
+        priority
+        className="object-cover object-center"
+        sizes="100vw"
+        quality={85}
       />
       <div className="absolute inset-0 bg-emerald-gradient opacity-85" />
       <div className="absolute inset-0 hero-pattern" />
