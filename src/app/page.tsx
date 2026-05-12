@@ -7,7 +7,14 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://gincanasclubescampestres.com' },
 };
 
-const WA_GENERAL = 'https://wa.me/51921451844?text=%C2%A1Hola!%20%E2%91%8B%20Vengo%20de%20la%20web%20y%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20la%20*GESTI%C3%93N%20DE%20EVENTOS%20DE%20ALTO%20IMPACTO*.%20%F0%9F%8F%9B%EF%B8%8F%E2%9C%A8%0APor%20favor%2C%20%C2%BFpodr%C3%ADan%20enviarme%20su%20cat%C3%A1logo%20de%20clubs%20exclusivos%3F%20Gracias.';
+const WA_GENERAL = 'https://wa.me/51921451844?text=%C2%A1Hola!%20Vengo%20de%20la%20web%20y%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20la%20*GESTI%C3%93N%20DE%20EVENTOS%20DE%20ALTO%20IMPACTO*.%0APor%20favor%2C%20%C2%BFpodr%C3%ADan%20enviarme%20su%20cat%C3%A1logo%20de%20clubs%20exclusivos%3F%20Gracias.';
+
+const HERO_SLIDES = [
+  '/images/hero/hero-1.webp',
+  '/images/hero/hero-2.webp',
+  '/images/hero/hero-3.webp',
+  '/images/hero/hero-4.webp',
+];
 
 export default function HomePage() {
   return <HomeContent />;
@@ -16,91 +23,146 @@ export default function HomePage() {
 function HomeContent() {
   return (
     <main className="min-h-screen bg-background font-sans">
-      <HeroBanner />
+      <HeroSlider />
       <ImpactCounters />
       <OverviewCards />
     </main>
   );
 }
 
-function HeroBanner() {
+/* ─── Hero Slider with Cross-Fade ─── */
+function HeroSlider() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-emerald-gradient opacity-90" />
-      <div className="absolute inset-0 hero-pattern" />
+    <section
+      className="relative overflow-hidden"
+      style={{ height: '100svh' }}
+    >
+      {/* Slide images — cross-fade via CSS transition */}
+      <div className="absolute inset-0 md:!h-[85vh]">
+        {HERO_SLIDES.map((src, i) => (
+          <div
+            key={src}
+            className={`hero-slide ${i === 0 ? 'active' : ''}`}
+            style={{ backgroundImage: `url(${src})` }}
+            data-hero-slide={i}
+          />
+        ))}
+      </div>
 
-      {/* Decorative */}
-      <div className="absolute top-20 left-10 w-64 h-64 bg-gold/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-emerald-deep/30 rounded-full blur-3xl" />
+      {/* Gradient Overlay — black 40% opacity, NON-NEGOTIABLE for legibility */}
+      <div
+        className="absolute inset-0 z-[1] md:!h-[85vh]"
+        style={{
+          background: 'linear-gradient(180deg, rgba(0,0,0,0.40) 0%, rgba(0,0,0,0.25) 40%, rgba(0,0,0,0.50) 100%)',
+        }}
+      />
 
-      {/* Content */}
-      <div className="relative z-10 container mx-auto px-5 md:px-8 text-center pt-28 pb-16">
-        <div className="max-w-4xl mx-auto">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/[0.08] px-4 py-2 mb-6 md:mb-8">
-            <div className="w-1.5 h-1.5 bg-gold rounded-full animate-pulse" />
-            <span className="text-xs md:text-sm text-white/70 font-medium tracking-wide">
-              Gestión de Eventos Institucionales
-            </span>
-          </div>
+      {/* Hero Slider Script */}
+      <HeroSliderScript />
 
-          {/* H1 */}
-          <h1 className="font-heading font-extrabold text-[2.3rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white leading-[1.15] sm:leading-tight mb-5 md:mb-6">
-            Gestión de Eventos de{' '}
-            <span className="text-gold-gradient">Alto Impacto</span>{' '}
-            para Instituciones Élite
-          </h1>
-
-          <p className="text-base md:text-lg lg:text-xl text-white/65 max-w-3xl mx-auto mb-8 md:mb-10 leading-relaxed px-2">
-            Más de <strong className="text-gold font-semibold">15 años</strong> conectando a las mejores organizaciones con nuestros{' '}
-            <strong className="text-gold font-semibold">8 clubes campestres</strong> exclusivos. Seguridad, logística integral y experiencias inolvidables.
-          </p>
-        </div>
-
-        {/* CTA Buttons — 90% width on mobile */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 max-w-[90%] sm:max-w-none mx-auto mb-12 md:mb-16">
-          <a
-            href={WA_GENERAL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-touch w-full sm:w-auto bg-gold hover:bg-gold-dark text-emerald-dark font-bold text-base px-8 shadow-lg shadow-gold/20 transition-all duration-300 hover:shadow-gold/40 hover:scale-[1.02]"
-            style={{ borderRadius: '4px' }}
-          >
-            Hablar con un Ejecutivo de Cuentas
-          </a>
-          <a
-            href="/clubes"
-            className="btn-touch w-full sm:w-auto border border-white/25 text-white hover:bg-white/10 font-semibold text-base px-8 transition-all duration-300"
-            style={{ borderRadius: '4px' }}
-          >
-            Explorar Clubes
-          </a>
-        </div>
-
-        {/* Stats Grid — 2 columns mobile */}
-        <div className="grid grid-cols-2 gap-0 max-w-lg mx-auto bg-white/[0.05] overflow-hidden border border-white/[0.06]" style={{ borderRadius: '8px' }}>
-          {[
-            { value: '500+', label: 'Eventos Exitosos' },
-            { value: '8', label: 'Clubes Élite' },
-            { value: '15+', label: 'Años de Experiencia' },
-            { value: '98%', label: 'Satisfacción' },
-          ].map((stat, i) => (
-            <div
-              key={stat.label}
-              className={`flex flex-col items-center gap-1.5 py-5 md:py-6 ${
-                i % 2 === 0 ? 'border-r border-white/[0.06]' : ''
-              } ${i < 2 ? 'border-b border-white/[0.06]' : ''}`}
-            >
-              <div className="text-2xl md:text-3xl font-heading font-bold text-white">
-                {stat.value}
+      {/* Content — fixed, centered */}
+      <div className="relative z-10 flex items-center justify-center" style={{ height: '100svh' }}>
+        <div className="md:!h-[85vh] flex items-center justify-center w-full">
+          <div className="container mx-auto px-5 md:px-8 text-center pt-24 pb-16">
+            <div className="max-w-4xl mx-auto">
+              {/* Badge */}
+              <div className="hero-content-animate inline-flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/[0.08] px-4 py-2 mb-6 md:mb-8">
+                <div className="w-1.5 h-1.5 bg-gold rounded-full animate-pulse" />
+                <span className="text-xs md:text-sm text-white/70 font-medium tracking-wide">
+                  Gestión de Eventos Institucionales
+                </span>
               </div>
-              <span className="text-[11px] md:text-sm text-white/50 font-medium">{stat.label}</span>
+
+              {/* H1 */}
+              <h1 className="hero-content-animate hero-content-animate-delay-1 font-heading font-extrabold text-[2.3rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white leading-[1.15] sm:leading-tight mb-5 md:mb-6">
+                Gestión de Eventos de{' '}
+                <span className="text-gold-gradient">Alto Impacto</span>{' '}
+                para Instituciones Élite
+              </h1>
+
+              <p className="hero-content-animate hero-content-animate-delay-2 text-base md:text-lg lg:text-xl text-white/75 max-w-3xl mx-auto mb-8 md:mb-10 leading-relaxed px-2">
+                Más de <strong className="text-gold font-semibold">15 años</strong> conectando a las mejores organizaciones con nuestros{' '}
+                <strong className="text-gold font-semibold">8 clubes campestres</strong> exclusivos. Seguridad, logística integral y experiencias inolvidables.
+              </p>
             </div>
-          ))}
+
+            {/* CTA Buttons */}
+            <div className="hero-content-animate hero-content-animate-delay-3 flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 max-w-[90%] sm:max-w-none mx-auto mb-12 md:mb-16">
+              <a
+                href={WA_GENERAL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-touch w-full sm:w-auto bg-gold hover:bg-gold-dark text-emerald-dark font-bold text-base px-8 shadow-lg shadow-gold/20 transition-all duration-300 hover:shadow-gold/40 hover:scale-[1.02]"
+                style={{ borderRadius: '4px' }}
+              >
+                Hablar con un Ejecutivo de Cuentas
+              </a>
+              <a
+                href="/clubes"
+                className="btn-touch w-full sm:w-auto border border-white/25 text-white hover:bg-white/10 font-semibold text-base px-8 transition-all duration-300"
+                style={{ borderRadius: '4px' }}
+              >
+                Explorar Clubes
+              </a>
+            </div>
+
+            {/* Stats Grid */}
+            <div className="hero-content-animate hero-content-animate-delay-4 grid grid-cols-2 gap-0 max-w-lg mx-auto bg-white/[0.05] overflow-hidden border border-white/[0.06]" style={{ borderRadius: '8px' }}>
+              {[
+                { value: '500+', label: 'Eventos Exitosos' },
+                { value: '8', label: 'Clubes Élite' },
+                { value: '15+', label: 'Años de Experiencia' },
+                { value: '98%', label: 'Satisfacción' },
+              ].map((stat, i) => (
+                <div
+                  key={stat.label}
+                  className={`flex flex-col items-center gap-1.5 py-5 md:py-6 ${
+                    i % 2 === 0 ? 'border-r border-white/[0.06]' : ''
+                  } ${i < 2 ? 'border-b border-white/[0.06]' : ''}`}
+                >
+                  <div className="text-2xl md:text-3xl font-heading font-bold text-white">
+                    {stat.value}
+                  </div>
+                  <span className="text-[11px] md:text-sm text-white/50 font-medium">{stat.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* Scroll indicator */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 hidden md:flex flex-col items-center gap-2 opacity-50">
+        <span className="text-[10px] text-white/60 tracking-widest uppercase">Scroll</span>
+        <div className="w-px h-8 bg-gradient-to-b from-white/40 to-transparent" />
+      </div>
     </section>
+  );
+}
+
+/* Slider logic — auto-advance every 4s with cross-fade */
+function HeroSliderScript() {
+  return (
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `
+          (function() {
+            var slides = document.querySelectorAll('[data-hero-slide]');
+            if (!slides.length) return;
+            var current = 0;
+            var total = slides.length;
+
+            function nextSlide() {
+              slides[current].classList.remove('active');
+              current = (current + 1) % total;
+              slides[current].classList.add('active');
+            }
+
+            setInterval(nextSlide, 4000);
+          })();
+        `,
+      }}
+    />
   );
 }
 
@@ -122,7 +184,7 @@ function ImpactCounters() {
             { value: '15+', label: 'Años de Experiencia', desc: 'Gestión ininterrumpida desde 2009' },
             { value: '500+', label: 'Eventos Exitosos', desc: 'Corporativos, académicos y sociales' },
             { value: '8', label: 'Clubes Élite', desc: 'Red exclusiva en las mejores ubicaciones' },
-            { value: '98%', label: 'Satisfacción Corporativa', desc: 'Índice de recomendaclient' },
+            { value: '98%', label: 'Satisfacción Corporativa', desc: 'Índice de recomendación' },
           ].map((stat, i) => (
             <CounterCard key={stat.label} stat={stat} index={i} />
           ))}
@@ -132,7 +194,6 @@ function ImpactCounters() {
   );
 }
 
-/* Individual animated counter card */
 function CounterCard({ stat, index }: { stat: { value: string; label: string; desc: string }; index: number }) {
   return (
     <div className="card-corporate bg-corporate-gray/50 p-5 md:p-7 text-center border border-border/40 group hover:border-gold/20 transition-colors">
@@ -214,7 +275,6 @@ function OverviewCards() {
               <div className={`h-[3px] bg-gradient-to-r ${page.gradient}`} />
               <div className="p-5 md:p-7 flex flex-col flex-1">
                 <div className="flex items-center gap-3 mb-3">
-                  {/* SVG Icon instead of emoji */}
                   <div className={`w-10 h-10 flex items-center justify-center flex-shrink-0 ${
                     page.gradient.includes('gold') ? 'bg-gold/10' : 'bg-emerald-light'
                   }`} style={{ borderRadius: '4px' }}>

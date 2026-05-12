@@ -40,7 +40,7 @@ const socialLinks = [
 
 export default function Footer({ onCotizar }: FooterProps) {
   return (
-    <footer className="bg-emerald-dark text-white">
+    <footer className="bg-emerald-dark text-white pb-[100px] md:pb-0">
       {/* Newsletter bar */}
       <div className="border-b border-white/10">
         <div className="container mx-auto px-4 md:px-6 py-8">
