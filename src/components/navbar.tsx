@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Lock, MessageCircle, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { WA_LINKS } from '@/lib/whatsapp';
 
 /* ─── Responsive breakpoints ─── */
 const NAVBAR_HEIGHT_DESKTOP = 70;
@@ -331,7 +332,7 @@ export default function Navbar({ onCotizar, onPortalSocios }: NavbarProps) {
 
               {/* WhatsApp */}
               <a
-                href="https://wa.me/51921451844?text=%C2%A1Hola!%20Vengo%20de%20la%20web%20y%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20la%20*GESTI%C3%93N%20DE%20EVENTOS%20DE%20ALTO%20IMPACTO*.%20Por%20favor%2C%20%C2%BFpodr%C3%ADan%20enviarme%20su%20cat%C3%A1logo%20de%20clubs%20exclusivos%3F%20Gracias."
+                href={WA_LINKS.drawer}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full flex items-center justify-center gap-2 h-[50px] text-white/60 hover:text-white text-[0.85rem] font-medium transition-all duration-200 active:scale-[0.98]"

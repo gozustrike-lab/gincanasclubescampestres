@@ -7,10 +7,7 @@ import {
   Target, Zap, Users, ArrowRight, CheckCircle2,
   Palette, Route
 } from 'lucide-react';
-
-/* WhatsApp pre-filled URLs */
-const WA_GINCANAS = 'https://wa.me/51921451844?text=Hola%2C%20me%20interesa%20el%20servicio%20de%20*GINCANAS%20CORPORATIVAS%20Y%20TEAM%20BUILDING*.%20%F0%9F%A4%9D%F0%9F%8F%86%0ABuscamos%20una%20experiencia%20de%20integraci%C3%B3n%20para%20nuestra%20empresa.%20%C2%BFPodr%C3%ADan%20detallarme%20las%20din%C3%A1micas%20y%20coberturas%3F';
-const WA_TRANSPORTE = 'https://wa.me/51921451844?text=Buen%20d%C3%ADa%2C%20solicito%20cotizaci%C3%B3n%20para%20el%20servicio%20de%20*FLOTA%20DE%20TRANSPORTE%20DE%20LUJO*.%20%F0%9F%9A%90%F0%9F%92%A8%0A-%20Origen%2FDestino%3A%0A-%20Cantidad%20de%20pasajeros%3A%0ADeseamos%20asegurar%20la%20disponibilidad%20para%20nuestro%20pr%C3%B3ximo%20evento.';
+import { WA_LINKS } from '@/lib/whatsapp';
 
 const services = [
   {
@@ -32,7 +29,7 @@ const services = [
       { icon: Camera, label: 'Cobertura Fotográfica' },
     ],
     color: 'emerald',
-    waLink: WA_GINCANAS,
+    waLink: WA_LINKS.gincanas,
   },
   {
     icon: Bus,
@@ -53,7 +50,7 @@ const services = [
       { icon: Zap, label: 'Disponibilidad 24/7' },
     ],
     color: 'gold',
-    waLink: WA_TRANSPORTE,
+    waLink: WA_LINKS.transporte,
   },
 ];
 
@@ -73,27 +70,7 @@ export default function ServiciosSection() {
   return (
     <section className="py-16 md:py-24 bg-corporate-gray" ref={ref}>
       <div className="container mx-auto px-5 md:px-8">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-3xl mx-auto mb-12 md:mb-16"
-        >
-          <span className="inline-flex items-center gap-2 bg-emerald-light text-emerald-deep font-medium text-sm mb-4 px-4 py-2">
-            Servicios Complementarios
-          </span>
-          <h2 className="font-heading font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-emerald-dark mb-5">
-            El Ecosistema de Servicios{' '}
-            <span className="text-gold-gradient">Gincanas</span>
-          </h2>
-          <p className="text-corporate-text/70 text-base md:text-lg leading-relaxed">
-            Más allá de nuestros clubes, ofrecemos un ecosistema integral de servicios
-            que convierte cada evento en una experiencia completa y sin preocupaciones.
-          </p>
-        </motion.div>
-
-        {/* Service Cards — equal height grid */}
+        {/* ── Service Cards — equal height grid, 24px min padding ── */}
         <div className="grid lg:grid-cols-2 gap-6 md:gap-8 mb-12 md:mb-16 items-stretch">
           {services.map((service, i) => (
             <motion.div
@@ -107,7 +84,7 @@ export default function ServiciosSection() {
                 {/* Gold gradient top border */}
                 <div className="h-[3px] bg-gradient-to-r from-transparent via-gold to-transparent" />
 
-                <div className="p-5 md:p-8 flex flex-col flex-1">
+                <div className="p-6 md:p-8 flex flex-col flex-1">
                   <div className="flex items-start gap-3 md:gap-4 mb-5">
                     <div className={`w-12 h-12 md:w-14 md:h-14 flex items-center justify-center flex-shrink-0 ${
                       service.color === 'emerald' ? 'bg-emerald-light' : 'bg-gold/10'
@@ -181,7 +158,7 @@ export default function ServiciosSection() {
           ))}
         </div>
 
-        {/* Ecosystem Diagram — minimalist with connecting line icons */}
+        {/* ── Ecosystem Diagram — minimalist with connecting line icons ── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}

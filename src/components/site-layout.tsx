@@ -6,23 +6,7 @@ import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
 import CotizadorModal from '@/components/cotizador-modal';
 import PortalSocios from '@/components/portal-socios';
-
-/* WhatsApp config */
-const WA_NUMBER = '51921451844';
-
-const WA_MESSAGES: Record<string, string> = {
-  '/': encodeURI('¡Hola! Vengo de la web y me gustaría recibir información sobre la *GESTIÓN DE EVENTOS DE ALTO IMPACTO*.\nPor favor, ¿podrían enviarme su catálogo de clubs exclusivos? Gracias.'),
-  '/nosotros': encodeURI('Estimados Gincanas Clubes Campestres, me gustaría conocer más sobre su *HISTORIA Y TRAYECTORIA* institucional.\nQuedo atento a su información.'),
-  '/clubes': encodeURI('¡Hola! Me interesa conocer los *CLUBES CAMPESTRES EXCLUSIVOS* que ofrecen.\n¿Podrían enviarme la ficha técnica y disponibilidad?'),
-  '/paseos-escolares': encodeURI('Estimados Gincanas Clubes Campestres, solicito información para un *PASEO ESCOLAR / ACADÉMICO*.\n- Institución:\n- Nro. de Alumnos:\nQuedo atento a su propuesta de seguridad y logística.'),
-  '/servicios': encodeURI('Hola, solicito información sobre los *SERVICIOS ADICIONALES* para eventos.\n- Tipo de evento:\n- Fecha estimada:\nQuedo atento a la cotización.'),
-  '/contacto': encodeURI('¡Hola! Vengo de la web y deseo comunicarme con un *EJECUTIVO COMERCIAL*.\nPor favor, contáctenme a la brevedad. Gracias.'),
-};
-
-function getWaLink(pathname: string): string {
-  const msg = WA_MESSAGES[pathname] || WA_MESSAGES['/'];
-  return `https://wa.me/${WA_NUMBER}?text=${msg}`;
-}
+import { getWaLink } from '@/lib/whatsapp';
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   const [cotizadorOpen, setCotizadorOpen] = useState(false);

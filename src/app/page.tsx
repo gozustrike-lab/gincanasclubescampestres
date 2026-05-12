@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { WA_LINKS } from '@/lib/whatsapp';
 
 export const metadata: Metadata = {
   title: 'Gincanas Clubes Campestres — Gestión de Eventos de Alto Impacto',
@@ -6,8 +7,6 @@ export const metadata: Metadata = {
     'Más de 15 años conectando a las mejores organizaciones con nuestros 8 clubes campestres exclusivos. Seguridad, logística integral y experiencias inolvidables para corporativos, universidades y colegios.',
   alternates: { canonical: 'https://gincanasclubescampestres.com' },
 };
-
-const WA_GENERAL = 'https://wa.me/51921451844?text=%C2%A1Hola!%20Vengo%20de%20la%20web%20y%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20la%20*GESTI%C3%93N%20DE%20EVENTOS%20DE%20ALTO%20IMPACTO*.%0APor%20favor%2C%20%C2%BFpodr%C3%ADan%20enviarme%20su%20cat%C3%A1logo%20de%20clubs%20exclusivos%3F%20Gracias.';
 
 const HERO_SLIDES = [
   '/images/hero/hero-1.webp',
@@ -86,7 +85,7 @@ function HeroSlider() {
           {/* CTA Buttons — 90% width mobile, py-4 air, thinner outline */}
           <div className="hero-content-animate hero-content-animate-delay-3 flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 hero-cta-mobile sm:max-w-none mb-8 md:mb-16">
             <a
-              href={WA_GENERAL}
+              href={WA_LINKS.hero}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-touch w-full sm:w-auto bg-gold hover:bg-gold-dark text-emerald-dark font-bold text-sm md:text-base px-6 py-3.5 md:py-4 shadow-lg shadow-gold/20 transition-all duration-300 hover:shadow-gold/40 hover:scale-[1.02]"
