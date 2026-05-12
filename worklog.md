@@ -72,3 +72,24 @@ Stage Summary:
 - Project is production-ready
 - All 5 tasks completed successfully
 - Website fully functional with all requested features
+
+---
+Task ID: 5
+Agent: Main Agent
+Task: Fix servicios page duplicate title + centralized WhatsApp URL encoding
+
+Work Log:
+- Read all source files to identify duplicate title and WhatsApp encoding issues
+- Created centralized /src/lib/whatsapp.ts with encodeWa() helper (encodeURIComponent + * restoration)
+- Rewrote servicios/page.tsx: emerald green header block, padding-top 100px, border-radius 0 0 30px 30px
+- Updated servicios-section.tsx: removed redundant header, kept cards + ecosystem, padding p-6 (24px min)
+- Updated site-layout.tsx, navbar.tsx, page.tsx to use centralized WhatsApp config
+- Build verified: zero errors, all 14 pages generated
+- Pushed to GitHub: commit cdff310
+
+Stage Summary:
+- Eliminated duplicate "El Ecosistema de Servicios Gincanas" — single emerald header block
+- Layered card design: -20px margin-top overlap on green block for depth effect
+- Centralized WhatsApp config in /src/lib/whatsapp.ts (was scattered across 4 files)
+- Proper URL encoding: encodeURIComponent with * preservation for WhatsApp bold
+- All emojis, accents, newlines properly percent-encoded
