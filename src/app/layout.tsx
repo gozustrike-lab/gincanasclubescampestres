@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     locale: "es_PE",
     images: [
       {
-        url: "/images/hero-bg.webp",
+        url: "/images/hero/desktop/hero-1.webp",
         width: 1344,
         height: 768,
         alt: "Club campestre exclusivo con piscinas y áreas de eventos",
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
     title: "Gincanas Clubes Campestres",
     description:
       "Gestión de Eventos de Alto Impacto para Instituciones Élite.",
-    images: ["/images/hero-bg.webp"],
+    images: ["/images/hero/desktop/hero-1.webp"],
   },
   alternates: {
     canonical: "https://gincanasclubescampestres.com",
@@ -114,7 +114,7 @@ const jsonLdLocalBusiness = {
   "@type": "LocalBusiness",
   "@id": "https://gincanasclubescampestres.com/#localbusiness",
   name: "Gincanas Clubes Campestres",
-  image: "https://gincanasclubescampestres.com/images/hero-bg.webp",
+  image: "https://gincanasclubescampestres.com/images/hero/desktop/hero-1.webp",
   url: "https://gincanasclubescampestres.com",
   telephone: "+51-1-234-5678",
   email: "contacto@gincanasclubescampestres.com",

@@ -269,21 +269,47 @@
 .hero-slide {
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
   opacity: 0;
   transition: opacity 1.5s ease-in-out;
   will-change: opacity;
-}
-/* Disable fixed on mobile (iOS doesn't support it) */
-@media (max-width: 767px) {
-  .hero-slide {
-    background-attachment: scroll;
-  }
+  overflow: hidden;
 }
 .hero-slide.active {
   opacity: 1;
+}
+
+/* ── Hero Slide Image — fill container, cover, no distortion ── */
+.hero-slide-picture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.hero-slide-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* ── Hero Post-Processing: deeper greens, richer blues ── */
+.hero-slide-img {
+  filter: contrast(1.05) brightness(0.95);
+  transition: filter 0.3s ease;
+}
+
+/* ── Hero Radial Overlay — lighter center, darker edges ── */
+.hero-radial-overlay {
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 45%,
+    rgba(0, 0, 0, 0.15) 0%,
+    rgba(0, 0, 0, 0.30) 40%,
+    rgba(0, 0, 0, 0.55) 80%,
+    rgba(0, 0, 0, 0.65) 100%
+  );
+  pointer-events: none;
 }
 
 /* Hero content — full height centered */
@@ -393,3 +419,11 @@
 
 /* ─── Page Header (Mini-Hero) — Subpages [DEPRECATED: Removed] ─── */
 /* PageHeader component removed. Subpages now use inline breadcrumbs + section headers. */
+
+/* ─── Club Card Image — Lazy Loaded with fade-in ─── */
+.club-card-image {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.club-card-image:hover {
+  transform: scale(1.03);
+}

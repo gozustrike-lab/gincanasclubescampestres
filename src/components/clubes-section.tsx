@@ -6,6 +6,7 @@ import {
   Users, Waves, Dumbbell, TreePine, UtensilsCrossed,
   Music, Wifi, Car, Search, X, ChevronRight, Star
 } from 'lucide-react';
+import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -25,6 +26,7 @@ interface Club {
   distance: string;
   description: string;
   vip: boolean;
+  image: string;
 }
 
 const clubs: Club[] = [
@@ -45,6 +47,7 @@ const clubs: Club[] = [
     distance: '45 min de Lima',
     description: 'Nuestro club insignia con capacidad para grandes eventos corporativos.',
     vip: true,
+    image: '/images/clubes/club-golf.webp',
   },
   {
     id: 'club-2',
@@ -63,6 +66,7 @@ const clubs: Club[] = [
     distance: '50 min de Lima',
     description: 'Ambiente exclusivo ideal para eventos de categoría premium.',
     vip: true,
+    image: '/images/clubes/club-piscina.webp',
   },
   {
     id: 'club-3',
@@ -80,6 +84,7 @@ const clubs: Club[] = [
     distance: '40 min de Lima',
     description: 'Amplios espacios verdes y áreas de recreación al aire libre.',
     vip: false,
+    image: '/images/clubes/club-deportes.webp',
   },
   {
     id: 'club-4',
@@ -97,6 +102,7 @@ const clubs: Club[] = [
     distance: 'Cusco',
     description: 'Inmersión en la naturaleza con instalaciones modernas.',
     vip: true,
+    image: '/images/clubes/club-naturaleza.webp',
   },
   {
     id: 'club-5',
@@ -114,6 +120,7 @@ const clubs: Club[] = [
     distance: '35 min de Lima',
     description: 'Exclusividad y privacidad para eventos íntimos de alto nivel.',
     vip: true,
+    image: '/images/clubes/club-gastronomia.webp',
   },
   {
     id: 'club-6',
@@ -132,6 +139,7 @@ const clubs: Club[] = [
     distance: '1 hr de Lima',
     description: 'Infraestructura completa para eventos académicos y corporativos.',
     vip: false,
+    image: '/images/clubes/club-eventos.webp',
   },
   {
     id: 'club-7',
@@ -148,6 +156,7 @@ const clubs: Club[] = [
     distance: 'Valle Sagrado',
     description: 'Entorno andino único con servicios de primer nivel.',
     vip: true,
+    image: '/images/clubes/club-familia.webp',
   },
   {
     id: 'club-8',
@@ -165,6 +174,7 @@ const clubs: Club[] = [
     distance: '3 hrs de Lima',
     description: 'Destino exclusivo en el sur con clima privilegiado todo el año.',
     vip: false,
+    image: '/images/clubes/club-corporativo.webp',
   },
 ];
 
@@ -325,9 +335,19 @@ export default function ClubesSection() {
               transition={{ duration: 0.4, delay: 0.3 + i * 0.05 }}
             >
               <Card className="card-premium overflow-hidden border border-border h-full flex flex-col">
-                {/* Club image placeholder */}
-                <div className={`h-40 bg-gradient-to-br ${club.color} relative flex items-center justify-center`}>
-                  <TreePine className="h-16 w-16 text-white/30" />
+                {/* Club image — lazy loaded, responsive, object-fit cover */}
+                <div className={`h-48 bg-gradient-to-br ${club.color} relative overflow-hidden`}>
+                  <Image
+                    src={club.image}
+                    alt={`${club.name} — ${club.location}`}
+                    fill
+                    loading="lazy"
+                    quality={85}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    className="object-cover club-card-image"
+                  />
+                  {/* Gradient overlay for text readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                   {club.vip && (
                     <Badge className="absolute top-3 right-3 bg-gold text-emerald-dark text-xs font-bold">
                       VIP

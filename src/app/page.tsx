@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { WA_LINKS } from '@/lib/whatsapp';
 
 export const metadata: Metadata = {
@@ -8,11 +9,28 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://gincanasclubescampestres.com' },
 };
 
+/* ─── Responsive Hero Slides — Desktop (landscape) + Mobile (portrait) ─── */
 const HERO_SLIDES = [
-  '/images/hero/hero-1.webp',
-  '/images/hero/hero-2.webp',
-  '/images/hero/hero-3.webp',
-  '/images/hero/hero-4.webp',
+  {
+    desktop: '/images/hero/desktop/hero-1.webp',
+    mobile: '/images/hero/mobile/hero-m1.webp',
+    alt: 'Club campestre exclusivo con campo de golf, piscina y clubhouse de lujo en Perú',
+  },
+  {
+    desktop: '/images/hero/desktop/hero-2.webp',
+    mobile: '/images/hero/mobile/hero-m2.webp',
+    alt: 'Evento corporativo de team building en un club campestre de lujo con montañas de fondo',
+  },
+  {
+    desktop: '/images/hero/desktop/hero-3.webp',
+    mobile: '/images/hero/mobile/hero-m3.webp',
+    alt: 'Resort campestre premium con múltiples piscinas, jardines tropicales y vistas a las montañas',
+  },
+  {
+    desktop: '/images/hero/desktop/hero-4.webp',
+    mobile: '/images/hero/mobile/hero-m4.webp',
+    alt: 'Elegante setup de evento al aire libre con carpa de lujo en un club campestre al atardecer',
+  },
 ];
 
 export default function HomePage() {
@@ -29,34 +47,56 @@ function HomeContent() {
   );
 }
 
-/* ─── Hero Slider with Cross-Fade — Full Bleed / Full Screen ─── */
+/* ─── Hero Slider — Ultra-HD, Responsive, Cross-Fade ─── */
 function HeroSlider() {
   return (
     <section className="hero-fullbleed relative overflow-hidden">
-      {/* Slide images — cross-fade via CSS transition */}
+      {/* Slide images — cross-fade via CSS transition, <picture> responsive srcset */}
       <div className="absolute inset-0">
-        {HERO_SLIDES.map((src, i) => (
+        {HERO_SLIDES.map((slide, i) => (
           <div
-            key={src}
+            key={i}
             className={`hero-slide ${i === 0 ? 'active' : ''}`}
-            style={{ backgroundImage: `url(${src})` }}
             data-hero-slide={i}
-          />
+          >
+            {/* ── Responsive <picture>: Only matching viewport image is downloaded ── */}
+            <picture className="hero-slide-picture">
+              {/* Mobile: Portrait 768px — served to screens < 768px */}
+              <source
+                media="(max-width: 767px)"
+                srcSet={slide.mobile}
+                type="image/webp"
+              />
+              {/* Desktop: Landscape 1344px — served to screens >= 768px */}
+              <source
+                media="(min-width: 768px)"
+                srcSet={slide.desktop}
+                type="image/webp"
+              />
+              {/* Fallback <img> — object-fit: cover, CSS filter applied */}
+              <img
+                src={slide.desktop}
+                alt={slide.alt}
+                className="hero-slide-img"
+                loading={i === 0 ? 'eager' : 'lazy'}
+                decoding={i === 0 ? 'sync' : 'async'}
+                fetchPriority={i === 0 ? 'high' : 'auto'}
+              />
+            </picture>
+          </div>
         ))}
       </div>
 
-      {/* Gradient Overlay — 40% black for legibility, full bleed */}
-      <div
-        className="absolute inset-0 z-[1]"
-        style={{
-          background: 'linear-gradient(180deg, rgba(0,0,0,0.40) 0%, rgba(0,0,0,0.25) 40%, rgba(0,0,0,0.50) 100%)',
-        }}
-      />
+      {/* ── Radial Overlay — lighter center, darker edges ── */}
+      <div className="absolute inset-0 z-[1] hero-radial-overlay" />
 
-      {/* Hero Slider Script */}
+      {/* ── Bottom gradient for stats legibility ── */}
+      <div className="absolute bottom-0 left-0 right-0 z-[1] h-[40%] bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
+
+      {/* Hero Slider Script — cross-fade every 4s */}
       <HeroSliderScript />
 
-      {/* Content — vertically centered, full width, no max-width constraint */}
+      {/* Content — vertically centered, full width */}
       <div className="hero-content-wrapper relative z-10 flex items-center justify-center">
         <div className="w-full px-5 md:px-8 text-center">
           <div className="max-w-4xl mx-auto">
@@ -146,6 +186,16 @@ function HeroSliderScript() {
             if (!slides.length) return;
             var current = 0;
             var total = slides.length;
+
+            /* Preload all slide images for instant cross-fade */
+            slides.forEach(function(slide) {
+              var imgs = slide.querySelectorAll('img');
+              imgs.forEach(function(img) {
+                if (img.dataset.src) {
+                  img.src = img.dataset.src;
+                }
+              });
+            });
 
             function nextSlide() {
               slides[current].classList.remove('active');
