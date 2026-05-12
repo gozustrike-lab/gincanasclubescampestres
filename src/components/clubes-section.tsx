@@ -325,18 +325,26 @@ export default function ClubesSection() {
           </div>
         </motion.div>
 
-        {/* Club Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-2">
+        {/* Club Grid — 2 col mobile, 3 tablet, 4 desktop */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 mt-2">
           {filteredClubs.map((club, i) => (
             <motion.div
               key={club.id}
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.4, delay: 0.3 + i * 0.05 }}
+              whileHover={{ y: -8 }}
+              style={{ transition: 'box-shadow 0.3s ease, transform 0.3s ease' }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 30px rgba(6,78,59,0.12), 0 4px 8px rgba(0,0,0,0.06)';
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03)';
+              }}
             >
-              <Card className="card-premium overflow-hidden border border-border h-full flex flex-col">
-                {/* Club image — lazy loaded, responsive, object-fit cover */}
-                <div className={`h-48 bg-gradient-to-br ${club.color} relative overflow-hidden`}>
+              <Card className="overflow-hidden border border-border h-full flex flex-col" style={{ borderRadius: '16px' }}>
+                {/* Club image — 16:9 on mobile (aspect-video), taller on PC */}
+                <div className={`h-48 sm:h-44 md:h-48 bg-gradient-to-br ${club.color} relative overflow-hidden`}>
                   <Image
                     src={club.image}
                     alt={`${club.name} — ${club.location}`}
@@ -346,38 +354,50 @@ export default function ClubesSection() {
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     className="object-cover club-card-image"
                   />
-                  {/* Gradient overlay for text readability */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                  {/* Bottom gradient for readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
+                  
+                  {/* VIP Badge — Glassmorphism */}
                   {club.vip && (
-                    <Badge className="absolute top-3 right-3 bg-gold text-emerald-dark text-xs font-bold">
+                    <span className="absolute top-3 right-3 text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full text-gold"
+                      style={{ background: 'rgba(180,148,92,0.20)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', border: '1px solid rgba(180,148,92,0.30)' }}
+                    >
                       VIP
-                    </Badge>
+                    </span>
                   )}
-                  <Badge variant="secondary" className="absolute bottom-3 left-3 bg-white/90 text-emerald-dark text-xs">
-                    <Car className="h-3 w-3 mr-1" />{club.distance}
-                  </Badge>
+                  
+                  {/* Distance Badge — Glassmorphism */}
+                  <span className="absolute bottom-3 left-3 text-[10px] font-medium text-white flex items-center gap-1 px-2.5 py-1 rounded-full"
+                    style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.15)' }}
+                  >
+                    <Car className="h-3 w-3" />{club.distance}
+                  </span>
                 </div>
-                <CardContent className="p-5 flex flex-col flex-1">
-                  <h3 className="font-heading font-bold text-lg text-emerald-dark mb-1">{club.name}</h3>
-                  <p className="text-sm text-corporate-text/60 mb-3 flex items-center gap-1">
+                <CardContent className="p-4 md:p-5 flex flex-col flex-1">
+                  <h3 className="font-heading font-bold text-base md:text-lg text-emerald-dark mb-1">{club.name}</h3>
+                  <p className="text-xs md:text-sm text-corporate-text/60 mb-2 md:mb-3 flex items-center gap-1">
                     <span className="inline-block w-1.5 h-1.5 bg-gold rounded-full" />
                     {club.location}
                   </p>
-                  <p className="text-sm text-corporate-text/70 mb-4 flex-1">{club.description}</p>
-                  <div className="flex flex-wrap gap-1.5 mb-4">
+                  <p className="text-xs md:text-sm text-corporate-text/70 mb-3 flex-1 hidden sm:block">{club.description}</p>
+                  
+                  {/* Compact amenity icons — fine linear style */}
+                  <div className="flex flex-wrap gap-1.5 mb-3 md:mb-4">
                     {club.amenitiesList.map((a) => (
-                      <Badge key={a.label} variant="outline" className="text-xs border-emerald-deep/20 text-emerald-dark/80 bg-emerald-light/30">
-                        <a.icon className="h-3 w-3 mr-1" />{a.label}
-                      </Badge>
+                      <span key={a.label} className="inline-flex items-center gap-1 text-[10px] md:text-xs text-emerald-dark/60 font-medium">
+                        <a.icon className="h-3 w-3 md:h-3.5 md:w-3.5" strokeWidth={1.5} />
+                        {a.label}
+                      </span>
                     ))}
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-corporate-text/50 font-medium">
-                      <Users className="h-3.5 w-3.5 inline mr-1" />
+                  
+                  <div className="flex items-center justify-between mt-auto pt-1">
+                    <span className="text-[10px] md:text-xs text-corporate-text/50 font-medium flex items-center gap-1">
+                      <Users className="h-3 w-3 md:h-3.5 md:w-3.5" strokeWidth={1.5} />
                       {club.capacityLabel}
                     </span>
-                    <Button size="sm" variant="ghost" className="text-emerald-deep hover:text-emerald-deep hover:bg-emerald-light p-0 h-auto font-semibold text-sm">
-                      Ver Detalles <ChevronRight className="h-4 w-4 ml-1" />
+                    <Button size="sm" variant="ghost" className="text-emerald-deep hover:text-emerald-deep hover:bg-emerald-light p-0 h-auto font-semibold text-xs md:text-sm">
+                      Ver Detalles <ChevronRight className="h-3.5 w-3.5 md:h-4 md:w-4 ml-0.5" />
                     </Button>
                   </div>
                 </CardContent>

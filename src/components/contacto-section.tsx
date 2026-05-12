@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import {
   Phone, Mail, MapPin, Clock, Send, Loader2,
-  Building2, CheckCircle2, Star, Crown, Award
+  CheckCircle2, Star, Crown, Award, Shield
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -25,38 +25,28 @@ function calculateLeadScore(data: {
   eventType: string;
 }): { score: number; tier: string; tierLabel: string } {
   let score = 0;
-
-  // Institution type scoring
   const instLower = data.institution.toLowerCase();
   if (instLower.includes('universidad') || instLower.includes('university')) score += 35;
   else if (instLower.includes('corporación') || instLower.includes('corporativo') || instLower.includes('empresa')) score += 40;
   else if (instLower.includes('colegio') || instLower.includes('escuela') || instLower.includes('school')) score += 30;
   else if (instLower.includes('banco') || instLower.includes('minera') || instLower.includes('telecom')) score += 45;
   else score += 15;
-
-  // Participants scoring
   if (data.participants >= 300) score += 30;
   else if (data.participants >= 100) score += 20;
   else if (data.participants >= 50) score += 15;
   else score += 5;
-
-  // Event type scoring
   const eventLower = data.eventType.toLowerCase();
   if (eventLower.includes('corporativo') || eventLower.includes('team')) score += 25;
   else if (eventLower.includes('escolar') || eventLower.includes('paseo')) score += 20;
   else if (eventLower.includes('universitario')) score += 22;
   else if (eventLower.includes('gala') || eventLower.includes('privado')) score += 28;
   else score += 10;
-
-  // Cap at 100
   score = Math.min(score, 100);
-
   let tier: string, tierLabel: string;
   if (score >= 75) { tier = 'platino'; tierLabel = 'Lead Platino'; }
   else if (score >= 50) { tier = 'oro'; tierLabel = 'Lead Oro'; }
   else if (score >= 30) { tier = 'plata'; tierLabel = 'Lead Plata'; }
   else { tier = 'bronce'; tierLabel = 'Lead Bronce'; }
-
   return { score, tier, tierLabel };
 }
 
@@ -69,21 +59,14 @@ const contactInfo = [
 
 export default function ContactoSection() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
-
+  const isInView = useInView(ref, { once: true, margin: '-80px' });
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [leadResult, setLeadResult] = useState<{ score: number; tier: string; tierLabel: string } | null>(null);
 
   const [form, setForm] = useState({
-    name: '',
-    institution: '',
-    email: '',
-    phone: '',
-    eventType: '',
-    participants: '',
-    dateRange: '',
-    message: '',
+    name: '', institution: '', email: '', phone: '',
+    eventType: '', participants: '', dateRange: '', message: '',
   });
 
   const updateField = (field: string, value: string) => {
@@ -93,29 +76,19 @@ export default function ContactoSection() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
     const scoreResult = calculateLeadScore({
       institution: form.institution,
       participants: parseInt(form.participants) || 0,
       eventType: form.eventType,
     });
     setLeadResult(scoreResult);
-
     try {
       await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...form,
-          participants: parseInt(form.participants) || 0,
-          score: scoreResult.score,
-          tier: scoreResult.tier,
-        }),
+        body: JSON.stringify({ ...form, participants: parseInt(form.participants) || 0, score: scoreResult.score, tier: scoreResult.tier }),
       });
-    } catch {
-      // Silently handle - still show result
-    }
-
+    } catch { /* silently handle */ }
     setLoading(false);
     setSubmitted(true);
   };
@@ -130,14 +103,14 @@ export default function ContactoSection() {
   const TierIcon = tierIcon || Award;
 
   return (
-    <section id="contacto" className="py-20 md:py-28 bg-white" ref={ref}>
+    <section id="contacto" className="py-16 md:py-24 bg-corporate-gray" ref={ref}>
       <div className="container mx-auto px-4 md:px-6">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-3xl mx-auto mb-16"
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="text-center max-w-3xl mx-auto mb-12 md:mb-16"
         >
           <Badge variant="secondary" className="bg-emerald-light text-emerald-deep font-medium mb-4">
             Business Lounge
@@ -145,97 +118,115 @@ export default function ContactoSection() {
           <h2 className="font-heading font-extrabold text-3xl md:text-4xl lg:text-5xl text-emerald-dark mb-6">
             Conectemos — <span className="text-gold">Hablemos de su Evento</span>
           </h2>
-          <p className="text-corporate-text/70 text-lg">
+          <p className="text-corporate-text/70 text-base md:text-lg">
             Nuestro equipo ejecutivo está listo para diseñar la experiencia perfecta
             para su institución. Complete el formulario y recibirá una respuesta personalizada en 24 horas.
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-5 gap-8 max-w-6xl mx-auto">
+        <div className="grid lg:grid-cols-5 gap-6 md:gap-8 max-w-6xl mx-auto">
           {/* Contact Info */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="lg:col-span-2 space-y-6"
+            transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
+            className="lg:col-span-2 space-y-4"
           >
             {contactInfo.map((info) => (
-              <div key={info.label} className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-emerald-light rounded-xl flex items-center justify-center flex-shrink-0">
-                  <info.icon className="h-5 w-5 text-emerald-deep" />
+              <div key={info.label} className="flex items-start gap-3 md:gap-4 bg-white rounded-2xl p-4 border border-border/50"
+                style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}
+              >
+                <div className="w-10 h-10 bg-emerald-light rounded-xl flex items-center justify-center flex-shrink-0">
+                  <info.icon className="h-4.5 w-4.5 text-emerald-deep" />
                 </div>
-                <div>
-                  <h4 className="font-heading font-bold text-sm text-emerald-dark">{info.label}</h4>
-                  <p className="text-sm text-corporate-text/80">{info.value}</p>
-                  <p className="text-xs text-corporate-text/40">{info.sub}</p>
+                <div className="min-w-0">
+                  <h4 className="font-heading font-bold text-xs md:text-sm text-emerald-dark">{info.label}</h4>
+                  <p className="text-xs md:text-sm text-corporate-text/80 truncate">{info.value}</p>
+                  <p className="text-[10px] md:text-xs text-corporate-text/40">{info.sub}</p>
                 </div>
               </div>
             ))}
 
-            {/* Map placeholder */}
-            <div className="bg-corporate-gray rounded-2xl h-48 flex items-center justify-center border border-border">
-              <div className="text-center">
-                <MapPin className="h-8 w-8 text-emerald-deep/30 mx-auto mb-2" />
-                <p className="text-sm text-corporate-text/40">San Isidro, Lima, Perú</p>
+            {/* Map — Interactive Luxury placeholder */}
+            <div
+              className="w-full rounded-2xl overflow-hidden border border-border/50"
+              style={{ height: '250px', boxShadow: '0 4px 20px rgba(0,0,0,0.04)' }}
+            >
+              <div className="w-full h-full bg-emerald-light/30 flex flex-col items-center justify-center gap-3">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: 'rgba(180,148,92,0.12)' }}>
+                  <MapPin className="h-6 w-6 text-gold" />
+                </div>
+                <div className="text-center">
+                  <p className="font-heading font-bold text-sm text-emerald-dark">San Isidro, Lima, Perú</p>
+                  <p className="text-xs text-corporate-text/40 mt-0.5">Av. Rivera Navarrete 1234, Oficina 501</p>
+                </div>
+                <a
+                  href="https://maps.google.com/?q=-12.0981,-77.0334"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[10px] font-medium text-gold hover:text-gold-dark transition-colors underline underline-offset-2"
+                >
+                  Abrir en Google Maps
+                </a>
               </div>
             </div>
           </motion.div>
 
-          {/* Form */}
+          {/* Form — Premium Card Design */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            transition={{ duration: 0.6, delay: 0.3, ease: 'easeOut' }}
             className="lg:col-span-3"
           >
             {!submitted ? (
-              <form onSubmit={handleSubmit} className="bg-corporate-gray/30 rounded-2xl p-6 md:p-8 border border-border space-y-5">
-                <div className="grid sm:grid-cols-2 gap-4">
+              <form
+                onSubmit={handleSubmit}
+                className="bg-white rounded-2xl p-5 md:p-6 border border-border/50 pb-8 space-y-4"
+                style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}
+              >
+                <div className="grid sm:grid-cols-2 gap-3 md:gap-4">
                   <div>
-                    <Label htmlFor="name" className="text-emerald-dark font-medium mb-1.5 block text-sm">
+                    <Label htmlFor="name" className="text-emerald-dark font-medium mb-1 block text-xs md:text-sm">
                       Nombre Completo *
                     </Label>
                     <Input
-                      id="name"
-                      required
+                      id="name" required
                       value={form.name}
                       onChange={(e) => updateField('name', e.target.value)}
                       placeholder="Dr. Juan Pérez"
-                      className="bg-white"
+                      className="bg-corporate-gray border-border/60 focus:border-gold focus:ring-gold/20 h-11 md:h-12 text-sm"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="institution" className="text-emerald-dark font-medium mb-1.5 block text-sm">
+                    <Label htmlFor="institution" className="text-emerald-dark font-medium mb-1 block text-xs md:text-sm">
                       Institución / Empresa *
                     </Label>
                     <Input
-                      id="institution"
-                      required
+                      id="institution" required
                       value={form.institution}
                       onChange={(e) => updateField('institution', e.target.value)}
-                      placeholder="Corporación ABC S.A.C."
-                      className="bg-white"
+                      placeholder="Universidad Nacional Mayor de San Marcos"
+                      className="bg-corporate-gray border-border/60 focus:border-gold focus:ring-gold/20 h-11 md:h-12 text-sm"
                     />
                   </div>
                 </div>
 
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className="grid sm:grid-cols-2 gap-3 md:gap-4">
                   <div>
-                    <Label htmlFor="email" className="text-emerald-dark font-medium mb-1.5 block text-sm">
+                    <Label htmlFor="email" className="text-emerald-dark font-medium mb-1 block text-xs md:text-sm">
                       Email Corporativo *
                     </Label>
                     <Input
-                      id="email"
-                      type="email"
-                      required
+                      id="email" type="email" required
                       value={form.email}
                       onChange={(e) => updateField('email', e.target.value)}
-                      placeholder="juan@corporacion.com"
-                      className="bg-white"
+                      placeholder="juan.perez@unmsm.edu.pe"
+                      className="bg-corporate-gray border-border/60 focus:border-gold focus:ring-gold/20 h-11 md:h-12 text-sm"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="phone" className="text-emerald-dark font-medium mb-1.5 block text-sm">
+                    <Label htmlFor="phone" className="text-emerald-dark font-medium mb-1 block text-xs md:text-sm">
                       Teléfono
                     </Label>
                     <Input
@@ -243,18 +234,18 @@ export default function ContactoSection() {
                       value={form.phone}
                       onChange={(e) => updateField('phone', e.target.value)}
                       placeholder="+51 999 888 777"
-                      className="bg-white"
+                      className="bg-corporate-gray border-border/60 focus:border-gold focus:ring-gold/20 h-11 md:h-12 text-sm"
                     />
                   </div>
                 </div>
 
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className="grid sm:grid-cols-2 gap-3 md:gap-4">
                   <div>
-                    <Label htmlFor="eventType" className="text-emerald-dark font-medium mb-1.5 block text-sm">
+                    <Label htmlFor="eventType" className="text-emerald-dark font-medium mb-1 block text-xs md:text-sm">
                       Tipo de Evento *
                     </Label>
                     <Select value={form.eventType} onValueChange={(v) => updateField('eventType', v)} required>
-                      <SelectTrigger className="bg-white">
+                      <SelectTrigger className="bg-corporate-gray border-border/60 h-11 md:h-12 text-sm">
                         <SelectValue placeholder="Seleccionar..." />
                       </SelectTrigger>
                       <SelectContent>
@@ -269,24 +260,21 @@ export default function ContactoSection() {
                     </Select>
                   </div>
                   <div>
-                    <Label htmlFor="participants" className="text-emerald-dark font-medium mb-1.5 block text-sm">
+                    <Label htmlFor="participants" className="text-emerald-dark font-medium mb-1 block text-xs md:text-sm">
                       Participantes Estimados *
                     </Label>
                     <Input
-                      id="participants"
-                      type="number"
-                      min="1"
-                      required
+                      id="participants" type="number" min="1" required
                       value={form.participants}
                       onChange={(e) => updateField('participants', e.target.value)}
                       placeholder="150"
-                      className="bg-white"
+                      className="bg-corporate-gray border-border/60 focus:border-gold focus:ring-gold/20 h-11 md:h-12 text-sm"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <Label htmlFor="dateRange" className="text-emerald-dark font-medium mb-1.5 block text-sm">
+                  <Label htmlFor="dateRange" className="text-emerald-dark font-medium mb-1 block text-xs md:text-sm">
                     Rango de Fechas Preferido
                   </Label>
                   <Input
@@ -294,43 +282,45 @@ export default function ContactoSection() {
                     value={form.dateRange}
                     onChange={(e) => updateField('dateRange', e.target.value)}
                     placeholder="15-20 de Julio 2025"
-                    className="bg-white"
+                    className="bg-corporate-gray border-border/60 focus:border-gold focus:ring-gold/20 h-11 md:h-12 text-sm"
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="message" className="text-emerald-dark font-medium mb-1.5 block text-sm">
+                  <Label htmlFor="message" className="text-emerald-dark font-medium mb-1 block text-xs md:text-sm">
                     Mensaje / Detalles Adicionales
                   </Label>
                   <Textarea
                     id="message"
                     value={form.message}
                     onChange={(e) => updateField('message', e.target.value)}
-                    placeholder="Cuéntenos más sobre su evento, objetivos especiales, requisitos..."
-                    className="bg-white min-h-[100px]"
+                    placeholder="Cuéntenos más sobre su evento, objetivos especiales, requisitos de catering o transporte..."
+                    className="bg-corporate-gray border-border/60 focus:border-gold focus:ring-gold/20 min-h-[100px] text-sm"
                   />
                 </div>
 
+                {/* Submit Button — Full width, emerald, bold */}
                 <Button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full bg-emerald-deep hover:bg-emerald-dark text-white font-bold text-base py-5 transition-all duration-300"
+                  type="submit" disabled={loading}
+                  className="w-full bg-emerald-deep hover:bg-emerald-dark text-white font-bold text-sm md:text-base py-5 transition-all duration-300"
+                  style={{ borderRadius: '12px' }}
                 >
                   {loading ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Procesando...
-                    </>
+                    <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Procesando...</>
                   ) : (
-                    <>
-                      <Send className="h-4 w-4 mr-2" />
-                      Enviar Solicitud
-                    </>
+                    <><Send className="h-4 w-4 mr-2" /> Enviar Solicitud</>
                   )}
                 </Button>
+
+                {/* Data Protection Notice */}
+                <div className="flex items-center justify-center gap-2 text-[10px] text-corporate-text/35">
+                  <Shield className="h-3 w-3" />
+                  Sus datos están protegidos. No compartimos información con terceros.
+                </div>
               </form>
             ) : (
-              <div className="bg-corporate-gray/30 rounded-2xl p-6 md:p-8 border border-border text-center">
+              /* Success State */
+              <div className="bg-white rounded-2xl p-6 md:p-8 border border-border/50 text-center" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
@@ -342,7 +332,7 @@ export default function ContactoSection() {
                   <h3 className="font-heading font-bold text-2xl text-emerald-dark mb-2">
                     ¡Solicitud Enviada!
                   </h3>
-                  <p className="text-corporate-text/60 mb-6">
+                  <p className="text-corporate-text/60 mb-6 text-sm md:text-base">
                     Nuestro equipo ejecutivo revisará su solicitud y se contactará en un plazo máximo de 24 horas.
                   </p>
 
@@ -351,32 +341,33 @@ export default function ContactoSection() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.3 }}
-                      className="bg-white rounded-xl p-6 border border-border inline-block mb-6"
+                      className="bg-corporate-gray rounded-xl p-5 md:p-6 inline-block mb-6 w-full max-w-xs mx-auto"
                     >
                       <div className="flex items-center justify-center gap-3 mb-3">
                         <TierIcon className="h-8 w-8 text-gold" />
-                        <div>
-                          <p className="text-xs text-corporate-text/40">Su clasificación</p>
-                          <p className="font-heading font-bold text-xl text-emerald-dark">
-                            {leadResult.tierLabel}
-                          </p>
+                        <div className="text-left">
+                          <p className="text-[10px] text-corporate-text/40">Su clasificación</p>
+                          <p className="font-heading font-bold text-lg text-emerald-dark">{leadResult.tierLabel}</p>
                         </div>
                       </div>
-                      <div className="w-full bg-corporate-gray rounded-full h-2.5 mb-2">
+                      <div className="w-full bg-white rounded-full h-2 mb-2">
                         <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${leadResult.score}%` }}
                           transition={{ duration: 1, delay: 0.5 }}
-                          className="bg-gold h-2.5 rounded-full"
+                          className="bg-gold h-2 rounded-full"
                         />
                       </div>
-                      <p className="text-xs text-corporate-text/40">
-                        Puntuación: {leadResult.score}/100
-                      </p>
+                      <p className="text-[10px] text-corporate-text/40">Puntuación: {leadResult.score}/100</p>
                     </motion.div>
                   )}
 
-                  <Button variant="outline" onClick={resetForm} className="border-emerald-deep text-emerald-dark">
+                  <Button
+                    variant="outline"
+                    onClick={resetForm}
+                    className="border-emerald-deep text-emerald-dark hover:bg-emerald-light"
+                    style={{ borderRadius: '12px' }}
+                  >
                     Enviar Otra Solicitud
                   </Button>
                 </motion.div>
@@ -384,6 +375,9 @@ export default function ContactoSection() {
             )}
           </motion.div>
         </div>
+
+        {/* Extra bottom margin so WhatsApp FAB doesn't cover last form element */}
+        <div className="h-20 md:h-4" />
       </div>
     </section>
   );

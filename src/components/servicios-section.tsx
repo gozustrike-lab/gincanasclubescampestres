@@ -78,21 +78,33 @@ export default function ServiciosSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.2 + i * 0.2 }}
+              whileHover={{ y: -8 }}
+              style={{ transition: 'box-shadow 0.3s ease, transform 0.3s ease' }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 30px rgba(6,78,59,0.12), 0 4px 8px rgba(0,0,0,0.06)';
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03)';
+              }}
               className="h-full"
             >
-              <div className="card-corporate bg-white h-full flex flex-col overflow-hidden border border-border/60">
+              <div className="card-corporate bg-white h-full flex flex-col overflow-hidden border border-border/60" style={{ borderRadius: '16px' }}>
                 {/* Gold gradient top border */}
                 <div className="h-[3px] bg-gradient-to-r from-transparent via-gold to-transparent" />
 
                 <div className="p-6 md:p-8 flex flex-col flex-1">
                   <div className="flex items-start gap-3 md:gap-4 mb-5">
-                    <div className={`w-12 h-12 md:w-14 md:h-14 flex items-center justify-center flex-shrink-0 ${
-                      service.color === 'emerald' ? 'bg-emerald-light' : 'bg-gold/10'
-                    }`}>
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ duration: 0.3 }}
+                      className={`w-12 h-12 md:w-14 md:h-14 flex items-center justify-center flex-shrink-0 ${
+                        service.color === 'emerald' ? 'bg-emerald-light' : 'bg-gold/10'
+                      }`}
+                    >
                       <service.icon className={`h-6 w-6 md:h-7 md:w-7 ${
                         service.color === 'emerald' ? 'text-emerald-deep' : 'text-gold-dark'
                       }`} />
-                    </div>
+                    </motion.div>
                     <div className="min-w-0">
                       <h3 className="font-heading font-bold text-lg md:text-xl text-emerald-dark leading-tight">
                         {service.title}

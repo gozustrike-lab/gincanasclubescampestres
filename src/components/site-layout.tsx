@@ -6,6 +6,7 @@ import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
 import CotizadorModal from '@/components/cotizador-modal';
 import PortalSocios from '@/components/portal-socios';
+import Preloader from '@/components/preloader';
 import { getWaLink } from '@/lib/whatsapp';
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
@@ -17,6 +18,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <>
+      <Preloader />
       <Navbar
         onCotizar={() => setCotizadorOpen(true)}
         onPortalSocios={() => setPortalOpen(true)}
