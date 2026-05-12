@@ -46,28 +46,29 @@ export const metadata: Metadata = {
     apple: "/images/logo-icon.webp",
   },
   openGraph: {
-    title: "Gincanas Clubes Campestres",
+    title: "Gincanas Clubes Campestres | Eventos para Instituciones Élite",
     description:
-      "Gestión de Eventos de Alto Impacto para Instituciones Élite. 8 clubes, 15+ años, 500+ eventos exitosos.",
+      "Logística y eventos premium en los 8 clubes campestres más exclusivos de Lima.",
     url: "https://gincanasclubescampestres.com",
     siteName: "Gincanas Clubes Campestres",
     type: "website",
     locale: "es_PE",
     images: [
       {
-        url: "/images/hero/desktop/hero-1.webp",
-        width: 1344,
-        height: 768,
-        alt: "Club campestre exclusivo con piscinas y áreas de eventos",
+        url: "/og-gincanas.png",
+        width: 1200,
+        height: 630,
+        alt: "Gincanas Clubes Campestres — Eventos de Alto Impacto",
+        type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Gincanas Clubes Campestres",
+    title: "Gincanas Clubes Campestres | Eventos para Instituciones Élite",
     description:
-      "Gestión de Eventos de Alto Impacto para Instituciones Élite.",
-    images: ["/images/hero/desktop/hero-1.webp"],
+      "Logística y eventos premium en los 8 clubes campestres más exclusivos de Lima.",
+    images: ["/og-gincanas.png"],
   },
   alternates: {
     canonical: "https://gincanasclubescampestres.com",
