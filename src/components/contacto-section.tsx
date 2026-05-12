@@ -51,7 +51,7 @@ function calculateLeadScore(data: {
 }
 
 const contactInfo = [
-  { icon: Phone, label: 'Llámanos', value: '+51 (01) 234-5678', sub: 'Lun-Vie 8:00-18:00' },
+  { icon: Phone, label: 'Llámanos', value: '+51 921 451 844', sub: 'WhatsApp y llamadas' },
   { icon: Mail, label: 'Escríbenos', value: 'contacto@gincanasclubescampestres.com', sub: 'Respuesta en 24h' },
   { icon: MapPin, label: 'Visítanos', value: 'Av. Rivera Navarrete 1234, San Isidro', sub: 'Lima, Perú' },
   { icon: Clock, label: 'Horario', value: 'Lunes a Viernes: 8:00 - 18:00', sub: 'Sábados: 9:00 - 13:00' },
@@ -233,7 +233,7 @@ export default function ContactoSection() {
                       id="phone"
                       value={form.phone}
                       onChange={(e) => updateField('phone', e.target.value)}
-                      placeholder="+51 999 888 777"
+                      placeholder="+51 921 451 844"
                       className="bg-corporate-gray border-border/60 focus:border-gold focus:ring-gold/20 h-11 md:h-12 text-sm"
                     />
                   </div>

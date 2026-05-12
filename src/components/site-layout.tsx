@@ -7,6 +7,7 @@ import Footer from '@/components/footer';
 import CotizadorModal from '@/components/cotizador-modal';
 import PortalSocios from '@/components/portal-socios';
 import Preloader from '@/components/preloader';
+import ContactBar from '@/components/contact-bar';
 import { getWaLink } from '@/lib/whatsapp';
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
@@ -28,13 +29,15 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       <CotizadorModal open={cotizadorOpen} onOpenChange={setCotizadorOpen} />
       <PortalSocios open={portalOpen} onOpenChange={setPortalOpen} />
 
-      {/* ─── Single WhatsApp Button — Professional ─── */}
+      {/* ─── Mobile: ContactBar (sticky footer) | Desktop: Floating FAB ─── */}
+      <ContactBar />
+
       <a
         href={waLink}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Contactar por WhatsApp"
-        className="fixed z-[55] w-[58px] h-[58px] rounded-full bg-[#25D366] flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95 wa-btn-pulse"
+        className="fixed z-[55] hidden md:flex w-[58px] h-[58px] rounded-full bg-[#25D366] items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95 wa-btn-pulse"
         style={{ bottom: '25px', right: '25px' }}
       >
         {/* WhatsApp SVG Icon */}

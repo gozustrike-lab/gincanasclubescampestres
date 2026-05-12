@@ -96,7 +96,7 @@ const jsonLdOrganization = {
   },
   contactPoint: {
     "@type": "ContactPoint",
-    telephone: "+51-1-234-5678",
+    telephone: "+51-921-451-844",
     contactType: "sales",
     availableLanguage: ["Spanish"],
     areaServed: "PE",
@@ -117,7 +117,7 @@ const jsonLdLocalBusiness = {
   name: "Gincanas Clubes Campestres",
   image: "https://gincanasclubescampestres.com/images/hero/desktop/hero-1.webp",
   url: "https://gincanasclubescampestres.com",
-  telephone: "+51-1-234-5678",
+  telephone: "+51-921-451-844",
   email: "contacto@gincanasclubescampestres.com",
   address: {
     "@type": "PostalAddress",

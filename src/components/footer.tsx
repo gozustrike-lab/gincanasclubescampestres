@@ -130,8 +130,8 @@ export default function Footer({ onCotizar }: FooterProps) {
               <div className="flex items-start gap-2.5">
                 <Phone className="h-4 w-4 text-gold mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-sm text-white/60">+51 (01) 234-5678</p>
-                  <p className="text-xs text-white/40">Lun-Vie 8:00-18:00</p>
+                  <a href="tel:+51921451844" className="text-sm text-white/60 hover:text-gold transition-colors">+51 921 451 844</a>
+                  <p className="text-xs text-white/40">WhatsApp y llamadas</p>
                 </div>
               </div>
               <div className="flex items-start gap-2.5">

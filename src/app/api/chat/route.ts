@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Chat API error:', error);
     return NextResponse.json(
-      { response: 'Disculpe, estoy experimentando dificultades técnicas. Por favor intente en unos momentos o contáctenos directamente al +51 (01) 234-5678.' },
+      { response: 'Disculpe, estoy experimentando dificultades técnicas. Por favor intente en unos momentos o contáctenos directamente al +51 921 451 844 (WhatsApp y llamadas).' },
       { status: 200 }
     );
   }
