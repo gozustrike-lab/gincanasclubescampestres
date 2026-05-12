@@ -30,15 +30,12 @@ function HomeContent() {
   );
 }
 
-/* ─── Hero Slider with Cross-Fade ─── */
+/* ─── Hero Slider with Cross-Fade — Full Bleed / Full Screen ─── */
 function HeroSlider() {
   return (
-    <section
-      className="relative overflow-hidden"
-      style={{ height: '100svh' }}
-    >
+    <section className="hero-fullbleed relative overflow-hidden">
       {/* Slide images — cross-fade via CSS transition */}
-      <div className="absolute inset-0 md:!h-[85vh]">
+      <div className="absolute inset-0">
         {HERO_SLIDES.map((src, i) => (
           <div
             key={src}
@@ -49,9 +46,9 @@ function HeroSlider() {
         ))}
       </div>
 
-      {/* Gradient Overlay — black 40% opacity, NON-NEGOTIABLE for legibility */}
+      {/* Gradient Overlay — 40% black for legibility, full bleed */}
       <div
-        className="absolute inset-0 z-[1] md:!h-[85vh]"
+        className="absolute inset-0 z-[1]"
         style={{
           background: 'linear-gradient(180deg, rgba(0,0,0,0.40) 0%, rgba(0,0,0,0.25) 40%, rgba(0,0,0,0.50) 100%)',
         }}
@@ -60,73 +57,71 @@ function HeroSlider() {
       {/* Hero Slider Script */}
       <HeroSliderScript />
 
-      {/* Content — fixed, centered */}
-      <div className="relative z-10 flex items-center justify-center" style={{ height: '100svh' }}>
-        <div className="md:!h-[85vh] flex items-center justify-center w-full">
-          <div className="container mx-auto px-5 md:px-8 text-center pt-24 pb-16">
-            <div className="max-w-4xl mx-auto">
-              {/* Badge */}
-              <div className="hero-content-animate inline-flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/[0.08] px-4 py-2 mb-6 md:mb-8">
-                <div className="w-1.5 h-1.5 bg-gold rounded-full animate-pulse" />
-                <span className="text-xs md:text-sm text-white/70 font-medium tracking-wide">
-                  Gestión de Eventos Institucionales
-                </span>
-              </div>
-
-              {/* H1 */}
-              <h1 className="hero-content-animate hero-content-animate-delay-1 font-heading font-extrabold text-[2.3rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white leading-[1.15] sm:leading-tight mb-5 md:mb-6">
-                Gestión de Eventos de{' '}
-                <span className="text-gold-gradient">Alto Impacto</span>{' '}
-                para Instituciones Élite
-              </h1>
-
-              <p className="hero-content-animate hero-content-animate-delay-2 text-base md:text-lg lg:text-xl text-white/75 max-w-3xl mx-auto mb-8 md:mb-10 leading-relaxed px-2">
-                Más de <strong className="text-gold font-semibold">15 años</strong> conectando a las mejores organizaciones con nuestros{' '}
-                <strong className="text-gold font-semibold">8 clubes campestres</strong> exclusivos. Seguridad, logística integral y experiencias inolvidables.
-              </p>
+      {/* Content — vertically centered, full width, no max-width constraint */}
+      <div className="hero-content-wrapper relative z-10 flex items-center justify-center">
+        <div className="w-full px-5 md:px-8 text-center">
+          <div className="max-w-4xl mx-auto">
+            {/* Badge */}
+            <div className="hero-content-animate inline-flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/[0.08] px-4 py-2 mb-6 md:mb-8">
+              <div className="w-1.5 h-1.5 bg-gold rounded-full animate-pulse" />
+              <span className="text-xs md:text-sm text-white/70 font-medium tracking-wide">
+                Gestión de Eventos Institucionales
+              </span>
             </div>
 
-            {/* CTA Buttons */}
-            <div className="hero-content-animate hero-content-animate-delay-3 flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 max-w-[90%] sm:max-w-none mx-auto mb-12 md:mb-16">
-              <a
-                href={WA_GENERAL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-touch w-full sm:w-auto bg-gold hover:bg-gold-dark text-emerald-dark font-bold text-base px-8 shadow-lg shadow-gold/20 transition-all duration-300 hover:shadow-gold/40 hover:scale-[1.02]"
-                style={{ borderRadius: '4px' }}
-              >
-                Hablar con un Ejecutivo de Cuentas
-              </a>
-              <a
-                href="/clubes"
-                className="btn-touch w-full sm:w-auto border border-white/25 text-white hover:bg-white/10 font-semibold text-base px-8 transition-all duration-300"
-                style={{ borderRadius: '4px' }}
-              >
-                Explorar Clubes
-              </a>
-            </div>
+            {/* H1 */}
+            <h1 className="hero-content-animate hero-content-animate-delay-1 font-heading font-extrabold text-[2.3rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white leading-[1.15] sm:leading-tight mb-5 md:mb-6">
+              Gestión de Eventos de{' '}
+              <span className="text-gold-gradient">Alto Impacto</span>{' '}
+              para Instituciones Élite
+            </h1>
 
-            {/* Stats Grid */}
-            <div className="hero-content-animate hero-content-animate-delay-4 grid grid-cols-2 gap-0 max-w-lg mx-auto bg-white/[0.05] overflow-hidden border border-white/[0.06]" style={{ borderRadius: '8px' }}>
-              {[
-                { value: '500+', label: 'Eventos Exitosos' },
-                { value: '8', label: 'Clubes Élite' },
-                { value: '15+', label: 'Años de Experiencia' },
-                { value: '98%', label: 'Satisfacción' },
-              ].map((stat, i) => (
-                <div
-                  key={stat.label}
-                  className={`flex flex-col items-center gap-1.5 py-5 md:py-6 ${
-                    i % 2 === 0 ? 'border-r border-white/[0.06]' : ''
-                  } ${i < 2 ? 'border-b border-white/[0.06]' : ''}`}
-                >
-                  <div className="text-2xl md:text-3xl font-heading font-bold text-white">
-                    {stat.value}
-                  </div>
-                  <span className="text-[11px] md:text-sm text-white/50 font-medium">{stat.label}</span>
+            <p className="hero-content-animate hero-content-animate-delay-2 text-base md:text-lg lg:text-xl text-white/75 max-w-3xl mx-auto mb-8 md:mb-10 leading-relaxed px-2">
+              Más de <strong className="text-gold font-semibold">15 años</strong> conectando a las mejores organizaciones con nuestros{' '}
+              <strong className="text-gold font-semibold">8 clubes campestres</strong> exclusivos. Seguridad, logística integral y experiencias inolvidables.
+            </p>
+          </div>
+
+          {/* CTA Buttons */}
+          <div className="hero-content-animate hero-content-animate-delay-3 flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 max-w-[90%] sm:max-w-none mx-auto mb-12 md:mb-16">
+            <a
+              href={WA_GENERAL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-touch w-full sm:w-auto bg-gold hover:bg-gold-dark text-emerald-dark font-bold text-base px-8 shadow-lg shadow-gold/20 transition-all duration-300 hover:shadow-gold/40 hover:scale-[1.02]"
+              style={{ borderRadius: '4px' }}
+            >
+              Hablar con un Ejecutivo de Cuentas
+            </a>
+            <a
+              href="/clubes"
+              className="btn-touch w-full sm:w-auto border border-white/25 text-white hover:bg-white/10 font-semibold text-base px-8 transition-all duration-300"
+              style={{ borderRadius: '4px' }}
+            >
+              Explorar Clubes
+            </a>
+          </div>
+
+          {/* Stats Grid */}
+          <div className="hero-content-animate hero-content-animate-delay-4 grid grid-cols-2 gap-0 max-w-lg mx-auto bg-white/[0.05] overflow-hidden border border-white/[0.06]" style={{ borderRadius: '8px' }}>
+            {[
+              { value: '500+', label: 'Eventos Exitosos' },
+              { value: '8', label: 'Clubes Élite' },
+              { value: '15+', label: 'Años de Experiencia' },
+              { value: '98%', label: 'Satisfacción' },
+            ].map((stat, i) => (
+              <div
+                key={stat.label}
+                className={`flex flex-col items-center gap-1.5 py-5 md:py-6 ${
+                  i % 2 === 0 ? 'border-r border-white/[0.06]' : ''
+                } ${i < 2 ? 'border-b border-white/[0.06]' : ''}`}
+              >
+                <div className="text-2xl md:text-3xl font-heading font-bold text-white">
+                  {stat.value}
                 </div>
-              ))}
-            </div>
+                <span className="text-[11px] md:text-sm text-white/50 font-medium">{stat.label}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>

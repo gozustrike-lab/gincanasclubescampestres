@@ -224,11 +224,6 @@
   animation: wa-pulse 10s ease-in-out infinite;
 }
 
-/* Page header curve — mobile only */
-.page-header-curve {
-  border-radius: 0 0 2.5rem 2.5rem;
-}
-
 /* Animated counter */
 @keyframes count-up {
   from { opacity: 0; transform: translateY(8px); }
@@ -252,17 +247,50 @@
 }
 
 /* ─── Hero Slider ─── */
+.hero-fullbleed {
+  width: 100vw;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin-left: calc(-50vw + 50%);
+}
+.hero-fullbleed,
+.hero-fullbleed * {
+  /* Kill any inherited margin-bottom */
+}
+
 .hero-slide {
   position: absolute;
   inset: 0;
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
   opacity: 0;
   transition: opacity 1.5s ease-in-out;
- will-change: opacity;
+  will-change: opacity;
+}
+/* Disable fixed on mobile (iOS doesn't support it) */
+@media (max-width: 767px) {
+  .hero-slide {
+    background-attachment: scroll;
+  }
 }
 .hero-slide.active {
   opacity: 1;
+}
+
+/* Hero content — full height centered */
+.hero-content-wrapper {
+  flex: 1;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 70px; /* offset for fixed navbar */
+  padding-bottom: 20px;
 }
 
 /* Hero content fade-in-up on load */
@@ -289,4 +317,52 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
+}
+
+/* ─── Page Header (Mini-Hero) — Subpages ─── */
+.page-header-mini {
+  min-height: 150px;
+  max-height: 250px;
+  padding-top: 70px; /* fixed navbar offset */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+}
+@media (min-width: 768px) {
+  .page-header-mini {
+    max-height: 250px;
+    min-height: 180px;
+  }
+}
+
+.page-header-bg {
+  background: linear-gradient(
+    135deg,
+    #022c22 0%,
+    #064e3b 40%,
+    #0a3d2e 70%,
+    #022c22 100%
+  );
+}
+
+.page-header-overlay {
+  background: radial-gradient(
+      ellipse at 30% 20%,
+      rgba(180, 148, 92, 0.08) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse at 80% 80%,
+      rgba(6, 78, 59, 0.12) 0%,
+      transparent 50%
+    );
+}
+
+.page-header-curve-bar {
+  height: 24px;
+  background: var(--background);
+  border-radius: 1.5rem 1.5rem 0 0;
 }

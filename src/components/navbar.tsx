@@ -262,8 +262,6 @@ export default function Navbar({ onCotizar, onPortalSocios }: NavbarProps) {
         )}
       </AnimatePresence>
 
-      {/* Spacer for fixed navbar */}
-      <div style={{ height: NAVBAR_HEIGHT }} className="w-full" />
     </>
   );
 }

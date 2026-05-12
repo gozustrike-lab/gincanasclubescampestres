@@ -152,15 +152,34 @@ export default function Footer({ onCotizar }: FooterProps) {
         </div>
       </div>
 
-      {/* Bottom bar */}
+      {/* Bottom bar — credits + legal */}
       <Separator className="bg-white/10" />
-      <div className="container mx-auto px-4 md:px-6 py-5">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/40">
-          <p>© {new Date().getFullYear()} Gincanas Clubes Campestres. Todos los derechos reservados.</p>
-          <div className="flex gap-4">
+      <div className="container mx-auto px-4 md:px-6 py-4">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-white/40">
+          <div className="flex flex-col sm:flex-row items-center gap-2">
+            <p>© {new Date().getFullYear()} Gincanas Clubes Campestres. Todos los derechos reservados.</p>
+          </div>
+          <div className="flex items-center gap-4">
             <button className="hover:text-white/60 transition-colors">Política de Privacidad</button>
             <button className="hover:text-white/60 transition-colors">Términos de Servicio</button>
           </div>
+        </div>
+      </div>
+
+      {/* ═══ Sub-footer — FastPagePro Credits (BLINDADO / PERMANENTE) ═══ */}
+      <div className="border-t border-white/[0.06]">
+        <div className="container mx-auto px-4 md:px-6 py-3">
+          <p className="text-center md:text-right text-[11px] text-white/25">
+            Diseñado y desarrollado por{' '}
+            <a
+              href="https://www.fastpagepro.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/35 hover:text-gold transition-colors duration-200 underline-offset-2 hover:underline"
+            >
+              FastPagePro
+            </a>
+          </p>
         </div>
       </div>
     </footer>
