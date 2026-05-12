@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import ClubesSection from '@/components/clubes-section';
-import PageHeader from '@/components/page-header';
 
 export const metadata: Metadata = {
   title: 'Clubes — Gincanas Clubes Campestres',
@@ -17,13 +17,16 @@ export const metadata: Metadata = {
 export default function ClubesPage() {
   return (
     <main className="min-h-screen bg-background font-sans">
-      <PageHeader
-        badge="Red Exclusiva"
-        title={<>Nuestra Colección de <span className="text-gold">Clubes Élite</span></>}
-        description="8 clubes seleccionados por su excelencia, ubicación privilegiada y capacidad para crear experiencias memorables."
-        breadcrumbLabel="Clubes"
-      />
-      <ClubesSection />
+      <div className="pt-[120px]">
+        <nav className="container mx-auto px-4 md:px-6 pb-5">
+          <div className="flex items-center gap-1.5 text-xs text-corporate-text/40">
+            <Link href="/" className="hover:text-gold transition-colors">Inicio</Link>
+            <span>/</span>
+            <span className="text-emerald-deep/60">Clubes</span>
+          </div>
+        </nav>
+        <ClubesSection />
+      </div>
     </main>
   );
 }

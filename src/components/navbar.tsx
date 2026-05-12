@@ -7,7 +7,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Lock, MessageCircle, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-const NAVBAR_HEIGHT = 70;
+/* ─── Responsive breakpoints ─── */
+const NAVBAR_HEIGHT_DESKTOP = 70;
+const NAVBAR_HEIGHT_TABLET = 70;
+const NAVBAR_HEIGHT_MOBILE = 76;
+const NAVBAR_HEIGHT_MOBILE_SCROLLED = 60;
+const SCROLL_THRESHOLD = 50;
 
 const navLinks = [
   { label: 'Inicio', href: '/' },
@@ -23,7 +28,7 @@ interface NavbarProps {
   onPortalSocios: () => void;
 }
 
-/* ─── Easing exacto: cubic-bezier(0.4, 0, 0.2, 1) ─── */
+/* ─── Easing: cubic-bezier(0.4, 0, 0.2, 1) ─── */
 const SLIDE_EASE: [number, number, number, number] = [0.4, 0, 0.2, 1];
 const SLIDE_DURATION = 0.4;
 const OVERLAY_DURATION = 0.35;
@@ -33,8 +38,13 @@ export default function Navbar({ onCotizar, onPortalSocios }: NavbarProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  const isHome = pathname === '/';
+
+  /* ─── Scroll detection ─── */
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 30);
+    const onScroll = () => {
+      setScrolled(window.scrollY > SCROLL_THRESHOLD);
+    };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -65,40 +75,81 @@ export default function Navbar({ onCotizar, onPortalSocios }: NavbarProps) {
 
   const closeDrawer = useCallback(() => setDrawerOpen(false), []);
 
+  /*
+    BACKGROUND LOGIC:
+    • Home + not scrolled  → fully transparent (image shows through)
+    • Home + scrolled       → solid emerald with blur + shadow
+    • Subpages (not home)   → ALWAYS solid (never transparent)
+  */
+  const isTransparent = isHome && !scrolled;
+  const isSolid = !isHome || scrolled;
+
   return (
     <>
+      {/* ═══════════════════════════════════════════════════════
+          NAVBAR — Dynamic, Responsive, Pixel-Perfect
+          ═══════════════════════════════════════════════════════ */}
       <header
-        style={{ height: NAVBAR_HEIGHT }}
         className={cn(
-          'fixed top-0 left-0 right-0 z-50 transition-all duration-300 navbar-glass',
-          scrolled && 'scrolled'
+          'fixed top-0 left-0 right-0 z-[1000] navbar-main',
+          /* Universal transition for all state changes */
+          'transition-all duration-[400ms] ease-in-out',
         )}
+        style={{
+          height: scrolled
+            ? `${NAVBAR_HEIGHT_MOBILE_SCROLLED}px`
+            : `${NAVBAR_HEIGHT_MOBILE}px`,
+        }}
       >
+        {/* ── Background layer ── */}
+        <div
+          className={cn(
+            'absolute inset-0 transition-all duration-[400ms] ease-in-out',
+            isTransparent
+              ? 'bg-transparent'
+              : 'navbar-solid-bg',
+          )}
+        />
+
         <nav
-          style={{ height: NAVBAR_HEIGHT }}
-          className="max-w-7xl mx-auto px-5 md:px-8 flex items-center justify-between w-full"
+          className="relative max-w-7xl mx-auto px-5 md:px-8 flex items-center justify-between w-full h-full"
         >
-          {/* Logo */}
-          <Link href="/" className="flex flex-col items-start group flex-shrink-0 z-10">
-            <span className="font-heading font-extrabold text-lg md:text-2xl tracking-wide text-gold group-hover:text-gold-light transition-colors leading-none">
+          {/* ── Logo — scale 0.9 on scroll ── */}
+          <Link href="/" className="flex flex-col items-start group flex-shrink-0 z-10 transition-transform duration-[400ms] ease-in-out"
+            style={{
+              transform: scrolled ? 'scale(0.9)' : 'scale(1)',
+              transformOrigin: 'left center',
+            }}
+          >
+            <span className={cn(
+              'font-heading font-extrabold text-lg md:text-2xl tracking-wide leading-none transition-colors duration-[400ms]',
+              isTransparent ? 'text-white' : 'text-gold',
+            )}>
               GINCANAS
             </span>
-            <span className="text-[9px] md:text-[10px] text-white/70 tracking-[0.22em] uppercase leading-none mt-0.5">
+            <span className={cn(
+              'text-[9px] md:text-[10px] tracking-[0.22em] uppercase leading-none mt-0.5 transition-colors duration-[400ms]',
+              isTransparent ? 'text-white/70' : 'text-white/60',
+            )}>
               Clubes Campestres
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-1">
+          {/* ═══ Desktop Navigation (>1024px) ═══ */}
+          <div className="hidden lg:flex items-center" style={{ gap: '32px' }}>
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  'text-[13px] font-medium tracking-wide px-3 py-2 rounded-lg transition-all duration-200',
+                  'text-[13px] font-medium tracking-wide px-1 py-2 transition-all duration-200',
                   isActive(link.href)
-                    ? 'text-gold bg-white/10'
-                    : 'text-white/75 hover:text-gold hover:bg-white/5'
+                    ? isTransparent
+                      ? 'text-gold'
+                      : 'text-gold'
+                    : isTransparent
+                      ? 'text-white/90 hover:text-gold'
+                      : 'text-white/75 hover:text-gold',
                 )}
               >
                 {link.label}
@@ -106,26 +157,58 @@ export default function Navbar({ onCotizar, onPortalSocios }: NavbarProps) {
             ))}
           </div>
 
-          {/* Desktop CTAs */}
-          <div className="hidden lg:flex items-center gap-3">
+          {/* ═══ Tablet CTAs (768px – 1024px): Portal + Cotizar only ═══ */}
+          <div className="hidden md:flex lg:hidden items-center gap-3">
             <button
               onClick={onPortalSocios}
-              className="text-[13px] text-white/75 hover:text-gold transition-colors duration-200 font-medium"
+              className="text-[13px] hover:text-gold transition-colors duration-200 font-medium"
+              style={{ color: isTransparent ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.75)' }}
             >
               Portal Socios
             </button>
             <button
               onClick={onCotizar}
-              className="btn-touch bg-gold hover:bg-gold-dark text-emerald-dark font-semibold text-[13px] px-5 rounded-lg transition-all duration-200 h-10"
+              className={cn(
+                'btn-corporate font-semibold text-[13px] px-5 transition-all duration-200',
+                isActive('/cotizar') ? 'bg-gold text-emerald-dark' : '',
+              )}
+              style={{
+                borderRadius: '4px',
+                background: '#b4945c',
+                color: '#022c22',
+              }}
             >
               Cotizar Ahora
             </button>
           </div>
 
-          {/* Mobile Hamburger */}
+          {/* ═══ Desktop CTAs (>1024px): Portal + Cotizar ═══ */}
+          <div className="hidden lg:flex items-center gap-3">
+            <button
+              onClick={onPortalSocios}
+              className={cn(
+                'text-[13px] font-medium transition-colors duration-200',
+                isTransparent ? 'text-white/75 hover:text-gold' : 'text-white/75 hover:text-gold',
+              )}
+            >
+              Portal Socios
+            </button>
+            <button
+              onClick={onCotizar}
+              className="btn-corporate bg-gold hover:bg-gold-dark text-emerald-dark font-semibold text-[13px] px-5 transition-all duration-200"
+              style={{ borderRadius: '4px' }}
+            >
+              Cotizar Ahora
+            </button>
+          </div>
+
+          {/* ═══ Mobile Hamburger (<768px) ═══ */}
           <button
             onClick={() => setDrawerOpen(true)}
-            className="lg:hidden w-11 h-11 flex items-center justify-center text-white z-10 rounded-lg hover:bg-white/5 transition-colors"
+            className={cn(
+              'md:hidden w-11 h-11 flex items-center justify-center z-10 rounded-lg transition-colors duration-200',
+              isTransparent ? 'text-white hover:bg-white/10' : 'text-white hover:bg-white/10',
+            )}
             aria-label="Abrir menú"
           >
             <Menu className="w-6 h-6" strokeWidth={1.8} />
@@ -134,7 +217,7 @@ export default function Navbar({ onCotizar, onPortalSocios }: NavbarProps) {
       </header>
 
       {/* ═══════════════════════════════════════════════════════
-          OFF-CANVAS DRAWER — Super Pro Slide-In
+          OFF-CANVAS DRAWER — Full-Screen Panel
           ═══════════════════════════════════════════════════════ */}
 
       {/* Backdrop: blur(8px) + dark overlay */}
@@ -145,7 +228,7 @@ export default function Navbar({ onCotizar, onPortalSocios }: NavbarProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: OVERLAY_DURATION, ease: SLIDE_EASE }}
-            className="fixed inset-0 z-[60] bg-black/50"
+            className="fixed inset-0 z-[1001] bg-black/50"
             style={{
               backdropFilter: 'blur(8px)',
               WebkitBackdropFilter: 'blur(8px)',
@@ -167,7 +250,7 @@ export default function Navbar({ onCotizar, onPortalSocios }: NavbarProps) {
               duration: SLIDE_DURATION,
               ease: SLIDE_EASE,
             }}
-            className="fixed top-0 right-0 bottom-0 z-[70] w-[88vw] max-w-[380px] flex flex-col overflow-hidden"
+            className="fixed top-0 right-0 bottom-0 z-[1002] w-[88vw] max-w-[380px] flex flex-col overflow-hidden"
             style={{
               background: 'linear-gradient(180deg, #0a0a0a 0%, #111111 40%, #0d1f17 100%)',
               boxShadow: '-20px 0 60px rgba(0,0,0,0.5)',
@@ -209,7 +292,6 @@ export default function Navbar({ onCotizar, onPortalSocios }: NavbarProps) {
                   >
                     <span className="relative">
                       {link.label}
-                      {/* Active underline indicator */}
                       {isActive(link.href) && (
                         <motion.span
                           layoutId="drawer-active-indicator"
@@ -249,7 +331,7 @@ export default function Navbar({ onCotizar, onPortalSocios }: NavbarProps) {
 
               {/* WhatsApp */}
               <a
-                href="https://wa.me/51921451844?text=%C2%A1Hola!%20%E2%91%8B%20Vengo%20de%20la%20web%20y%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20la%20*GESTI%C3%93N%20DE%20EVENTOS%20DE%20ALTO%20IMPACTO*.%20%F0%9F%8F%9B%EF%B8%8F%E2%9C%A8%0APor%20favor%2C%20%C2%BFpodr%C3%ADan%20enviarme%20su%20cat%C3%A1logo%20de%20clubs%20exclusivos%3F%20Gracias."
+                href="https://wa.me/51921451844?text=%C2%A1Hola!%20Vengo%20de%20la%20web%20y%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20la%20*GESTI%C3%93N%20DE%20EVENTOS%20DE%20ALTO%20IMPACTO*.%20Por%20favor%2C%20%C2%BFpodr%C3%ADan%20enviarme%20su%20cat%C3%A1logo%20de%20clubs%20exclusivos%3F%20Gracias."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full flex items-center justify-center gap-2 h-[50px] text-white/60 hover:text-white text-[0.85rem] font-medium transition-all duration-200 active:scale-[0.98]"
@@ -261,7 +343,6 @@ export default function Navbar({ onCotizar, onPortalSocios }: NavbarProps) {
           </motion.div>
         )}
       </AnimatePresence>
-
     </>
   );
 }

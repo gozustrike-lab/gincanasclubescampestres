@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import ServiciosSection from '@/components/servicios-section';
-import PageHeader from '@/components/page-header';
 
 export const metadata: Metadata = {
   title: 'Servicios Adicionales — Gincanas Clubes Campestres',
@@ -17,13 +17,16 @@ export const metadata: Metadata = {
 export default function ServiciosPage() {
   return (
     <main className="min-h-screen bg-background font-sans">
-      <PageHeader
-        badge="Servicios Complementarios"
-        title={<>El Ecosistema de Servicios <span className="text-gold">Gincanas</span></>}
-        description="Más allá de nuestros clubes, un ecosistema integral que convierte cada evento en una experiencia completa y sin preocupaciones."
-        breadcrumbLabel="Servicios"
-      />
-      <ServiciosSection />
+      <div className="pt-[120px]">
+        <nav className="container mx-auto px-4 md:px-6 pb-5">
+          <div className="flex items-center gap-1.5 text-xs text-corporate-text/40">
+            <Link href="/" className="hover:text-gold transition-colors">Inicio</Link>
+            <span>/</span>
+            <span className="text-emerald-deep/60">Servicios</span>
+          </div>
+        </nav>
+        <ServiciosSection />
+      </div>
     </main>
   );
 }

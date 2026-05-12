@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import PaseosSection from '@/components/paseos-section';
-import PageHeader from '@/components/page-header';
 
 export const metadata: Metadata = {
   title: 'Paseos Escolares — Gincanas Clubes Campestres',
@@ -17,13 +17,16 @@ export const metadata: Metadata = {
 export default function PaseosEscolaresPage() {
   return (
     <main className="min-h-screen bg-background font-sans">
-      <PageHeader
-        badge="Programa Educativo"
-        title={<>Programa Académico de <span className="text-gold">Paseos Escolares</span></>}
-        description="Experiencias educativas transformadoras que complementan el currículo escolar con actividades diseñadas por pedagogos profesionales."
-        breadcrumbLabel="Paseos Escolares"
-      />
-      <PaseosSection />
+      <div className="pt-[120px]">
+        <nav className="container mx-auto px-4 md:px-6 pb-5">
+          <div className="flex items-center gap-1.5 text-xs text-corporate-text/40">
+            <Link href="/" className="hover:text-gold transition-colors">Inicio</Link>
+            <span>/</span>
+            <span className="text-emerald-deep/60">Paseos Escolares</span>
+          </div>
+        </nav>
+        <PaseosSection />
+      </div>
     </main>
   );
 }

@@ -170,16 +170,21 @@
     radial-gradient(circle at 75% 75%, rgba(6, 78, 59, 0.08) 0%, transparent 50%);
 }
 
-/* Glassmorphism navbar */
-.navbar-glass {
-  background: rgba(2, 44, 34, 0.85);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid rgba(180, 148, 92, 0.08);
+/* ─── Dynamic Navbar ─── */
+/* Transparent state (home, top) */
+/* Solid state: applied via .navbar-solid-bg class */
+.navbar-solid-bg {
+  background: rgba(6, 78, 59, 0.95);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border-bottom: 1px solid rgba(180, 148, 92, 0.06);
+  box-shadow: 0 1px 20px rgba(0, 0, 0, 0.12);
 }
-.navbar-glass.scrolled {
-  background: rgba(2, 44, 34, 0.96);
-  box-shadow: 0 1px 20px rgba(0, 0, 0, 0.15);
+/* Desktop and tablet: fixed height (no shrink) */
+@media (min-width: 768px) {
+  .navbar-main {
+    height: 70px !important;
+  }
 }
 
 /* Mobile drawer overlay */
@@ -386,50 +391,5 @@
   margin-right: auto;
 }
 
-/* ─── Page Header (Mini-Hero) — Subpages ─── */
-.page-header-mini {
-  min-height: 150px;
-  max-height: 250px;
-  padding-top: 70px; /* fixed navbar offset */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
-}
-@media (min-width: 768px) {
-  .page-header-mini {
-    max-height: 250px;
-    min-height: 180px;
-  }
-}
-
-.page-header-bg {
-  background: linear-gradient(
-    135deg,
-    #022c22 0%,
-    #064e3b 40%,
-    #0a3d2e 70%,
-    #022c22 100%
-  );
-}
-
-.page-header-overlay {
-  background: radial-gradient(
-      ellipse at 30% 20%,
-      rgba(180, 148, 92, 0.08) 0%,
-      transparent 60%
-    ),
-    radial-gradient(
-      ellipse at 80% 80%,
-      rgba(6, 78, 59, 0.12) 0%,
-      transparent 50%
-    );
-}
-
-.page-header-curve-bar {
-  height: 24px;
-  background: var(--background);
-  border-radius: 1.5rem 1.5rem 0 0;
-}
+/* ─── Page Header (Mini-Hero) — Subpages [DEPRECATED: Removed] ─── */
+/* PageHeader component removed. Subpages now use inline breadcrumbs + section headers. */

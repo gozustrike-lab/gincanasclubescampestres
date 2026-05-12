@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import ContactoSection from '@/components/contacto-section';
-import PageHeader from '@/components/page-header';
 
 export const metadata: Metadata = {
   title: 'Contacto — Gincanas Clubes Campestres',
@@ -17,13 +17,16 @@ export const metadata: Metadata = {
 export default function ContactoPage() {
   return (
     <main className="min-h-screen bg-background font-sans">
-      <PageHeader
-        badge="Business Lounge"
-        title={<>Conectemos — <span className="text-gold">Hablemos de su Evento</span></>}
-        description="Nuestro equipo ejecutivo está listo para diseñar la experiencia perfecta para su institución."
-        breadcrumbLabel="Contacto"
-      />
-      <ContactoSection />
+      <div className="pt-[120px]">
+        <nav className="container mx-auto px-4 md:px-6 pb-5">
+          <div className="flex items-center gap-1.5 text-xs text-corporate-text/40">
+            <Link href="/" className="hover:text-gold transition-colors">Inicio</Link>
+            <span>/</span>
+            <span className="text-emerald-deep/60">Contacto</span>
+          </div>
+        </nav>
+        <ContactoSection />
+      </div>
     </main>
   );
 }

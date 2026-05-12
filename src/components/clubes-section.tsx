@@ -219,7 +219,7 @@ export default function ClubesSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="bg-white rounded-2xl p-4 md:p-6 mb-10 shadow-sm border border-border"
+          className="bg-white rounded-2xl p-4 md:p-6 mb-10 md:mb-[40px] shadow-sm border border-border"
         >
           <div className="flex flex-col md:flex-row gap-4">
             {/* Search */}
@@ -235,7 +235,7 @@ export default function ClubesSection() {
             </div>
 
             {/* Capacity filter */}
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex gap-3 flex-wrap">
               <Button
                 variant={capacityFilter === 'all' ? 'default' : 'outline'}
                 size="sm"
@@ -271,7 +271,7 @@ export default function ClubesSection() {
             </div>
 
             {/* Amenity filter */}
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex gap-3 flex-wrap">
               <Button
                 variant={amenityFilter === 'all' ? 'default' : 'outline'}
                 size="sm"
@@ -316,7 +316,7 @@ export default function ClubesSection() {
         </motion.div>
 
         {/* Club Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-2">
           {filteredClubs.map((club, i) => (
             <motion.div
               key={club.id}

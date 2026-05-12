@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import NosotrosSection from '@/components/nosotros-section';
-import PageHeader from '@/components/page-header';
 
 export const metadata: Metadata = {
   title: 'Nosotros — Gincanas Clubes Campestres',
@@ -17,13 +17,16 @@ export const metadata: Metadata = {
 export default function NosotrosPage() {
   return (
     <main className="min-h-screen bg-background font-sans">
-      <PageHeader
-        badge="Nuestra Historia"
-        title={<>Nuestra Herencia de <span className="text-gold">Excelencia</span></>}
-        description="Desde 2009, el referente en gestión de eventos institucionales de alto impacto en Perú."
-        breadcrumbLabel="Nosotros"
-      />
-      <NosotrosSection />
+      <div className="pt-[120px]">
+        <nav className="container mx-auto px-4 md:px-6 pb-5">
+          <div className="flex items-center gap-1.5 text-xs text-corporate-text/40">
+            <Link href="/" className="hover:text-gold transition-colors">Inicio</Link>
+            <span>/</span>
+            <span className="text-emerald-deep/60">Nosotros</span>
+          </div>
+        </nav>
+        <NosotrosSection />
+      </div>
     </main>
   );
 }
