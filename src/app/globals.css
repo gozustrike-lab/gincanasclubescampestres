@@ -341,7 +341,7 @@
 /* ─── Hero H1 Text-Shadow — Mobile Only ─── */
 @media (max-width: 767px) {
   .hero-content-wrapper h1 {
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
   }
 }
 
@@ -353,24 +353,24 @@
   overflow: hidden;
 }
 
-/* ─── Hero Stats Grid — Horizontal Flex + Glassmorphism ─── */
+/* ─── Hero Stats Grid — Flex desktop + Grid 2x2 mobile ─── */
 .hero-stats-grid {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.10);
   border-radius: 12px;
-  overflow: hidden;
+  padding: 8px;
 }
 .hero-stats-grid .stat-cell {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  padding: 16px 14px;
+  padding: 14px 10px;
 }
 .hero-stats-grid .stat-value {
   font-size: 1.5rem;
@@ -379,12 +379,20 @@
   color: white;
 }
 .hero-stats-grid .stat-label {
-  font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.6);
   font-weight: 500;
   letter-spacing: 0.01em;
+  text-align: center;
 }
 @media (min-width: 768px) {
+  .hero-stats-grid {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 0;
+    padding: 0;
+  }
   .hero-stats-grid .stat-value {
     font-size: 1.875rem;
   }

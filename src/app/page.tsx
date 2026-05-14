@@ -119,7 +119,7 @@ function HeroSlider() {
             animate="visible"
             custom={0.6}
             variants={fadeInUp}
-            className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 hero-cta-mobile sm:max-w-none mb-8 md:mb-16"
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 hero-cta-mobile sm:max-w-none mb-6 md:mb-16"
           >
             <a
               href={WA_LINKS.hero}
