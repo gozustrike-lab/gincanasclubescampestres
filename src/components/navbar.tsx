@@ -229,7 +229,7 @@ export default function Navbar({ onCotizar, onPortalSocios }: NavbarProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: OVERLAY_DURATION, ease: SLIDE_EASE }}
-            className="fixed inset-0 z-[1001] bg-black/50"
+            className="fixed inset-0 z-[99999] bg-black/50"
             style={{
               backdropFilter: 'blur(8px)',
               WebkitBackdropFilter: 'blur(8px)',
@@ -251,7 +251,7 @@ export default function Navbar({ onCotizar, onPortalSocios }: NavbarProps) {
               duration: SLIDE_DURATION,
               ease: SLIDE_EASE,
             }}
-            className="fixed top-0 right-0 bottom-0 z-[1002] w-[88vw] max-w-[380px] flex flex-col overflow-hidden"
+            className="fixed top-0 right-0 bottom-0 z-[99999] w-[88vw] max-w-[380px] flex flex-col overflow-hidden"
             style={{
               background: 'linear-gradient(180deg, #0a0a0a 0%, #111111 40%, #0d1f17 100%)',
               boxShadow: '-20px 0 60px rgba(0,0,0,0.5)',
@@ -278,7 +278,7 @@ export default function Navbar({ onCotizar, onPortalSocios }: NavbarProps) {
 
             {/* ── Nav Links ── */}
             <div className="flex-1 overflow-y-auto px-3 py-3">
-              <nav className="flex flex-col">
+              <nav className="flex flex-col" style={{ gap: '6px' }}>
                 {navLinks.map((link, idx) => (
                   <Link
                     key={link.href}
@@ -288,7 +288,7 @@ export default function Navbar({ onCotizar, onPortalSocios }: NavbarProps) {
                       'group flex items-center px-4 h-[56px] text-[1.05rem] font-bold tracking-[0.01em] transition-all duration-200 rounded-xl mx-1',
                       isActive(link.href)
                         ? 'text-gold bg-white/[0.04]'
-                        : 'text-white/85 hover:text-gold hover:bg-white/[0.03]'
+                        : 'text-white/85 hover:text-gold hover:bg-white/[0.03] opacity-70 hover:opacity-100'
                     )}
                   >
                     <span className="relative">
@@ -310,7 +310,7 @@ export default function Navbar({ onCotizar, onPortalSocios }: NavbarProps) {
             </div>
 
             {/* ── Drawer Footer / CTA Zone ── */}
-            <div className="px-5 pb-7 pt-4 space-y-3 border-t border-white/[0.06]">
+            <div className="px-5 pb-10 pt-4 space-y-3 border-t border-white/[0.06]">
               {/* VIP — Portal Socios */}
               <button
                 onClick={() => { onPortalSocios(); closeDrawer(); }}
