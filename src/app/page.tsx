@@ -86,21 +86,6 @@ function HeroSlider() {
       <div className="hero-content-wrapper relative z-10 flex items-center justify-center">
         <div className="w-full px-5 md:px-8 text-center">
           <div className="max-w-4xl mx-auto">
-            {/* Badge */}
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              custom={0}
-              variants={fadeInUp}
-            >
-              <div className="inline-flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/[0.08] px-3.5 py-1.5 mb-4 md:mb-8">
-                <div className="w-1.5 h-1.5 bg-gold rounded-full animate-pulse" />
-                <span className="text-xs md:text-sm text-white/70 font-medium tracking-wide">
-                  Gestión de Eventos Institucionales
-                </span>
-              </div>
-            </motion.div>
-
             {/* H1 — Fade in up, 0.2s delay */}
             <motion.h1
               initial="hidden"
@@ -108,6 +93,7 @@ function HeroSlider() {
               custom={0.2}
               variants={fadeInUp}
               className="font-heading font-extrabold text-[2rem] sm:text-[2.2rem] md:text-5xl lg:text-6xl xl:text-7xl text-white leading-[1.1] md:leading-tight mb-4 md:mb-6"
+              style={{ letterSpacing: '-0.02em' }}
             >
               Gestión de Eventos de{' '}
               <span className="text-gold-gradient">Alto Impacto</span>{' '}
@@ -120,7 +106,7 @@ function HeroSlider() {
               animate="visible"
               custom={0.4}
               variants={fadeInUp}
-              className="hero-paragraph-clamp text-sm md:text-lg lg:text-xl text-white/75 max-w-3xl mx-auto mb-6 md:mb-10 leading-relaxed px-2"
+              className="hero-paragraph-clamp text-sm md:text-lg lg:text-xl text-white/75 max-w-[700px] mx-auto mb-6 md:mb-10 leading-relaxed px-2"
             >
               Más de <strong className="text-gold font-semibold">15 años</strong> conectando a las mejores organizaciones con nuestros{' '}
               <strong className="text-gold font-semibold">8 clubes campestres</strong> exclusivos. Seguridad, logística integral y experiencias inolvidables.
@@ -159,14 +145,12 @@ function HeroSlider() {
             animate="visible"
             custom={0.8}
             variants={fadeInUp}
-            className="hero-stats-grid max-w-sm mx-auto"
+            className="hero-stats-grid max-w-lg mx-auto"
           >
-            {STATS.map((stat, i) => (
+            {STATS.map((stat) => (
               <div
                 key={stat.label}
-                className={`stat-cell ${
-                  i % 2 === 0 ? 'border-r border-white/[0.06]' : ''
-                } ${i < 2 ? 'border-b border-white/[0.06]' : ''}`}
+                className="stat-cell"
               >
                 <AnimatedStatNumber value={stat.value} suffix={stat.suffix} />
                 <span className="stat-label">{stat.label}</span>

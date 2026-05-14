@@ -353,45 +353,34 @@
   overflow: hidden;
 }
 
-/* ─── Hero Stats Grid — Mobile Compact ─── */
+/* ─── Hero Stats Grid — Horizontal Flex + Glassmorphism ─── */
 .hero-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0;
-  background: rgba(0, 0, 0, 0.20);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 12px;
   overflow: hidden;
-}
-/* Mobile: lighter translucent container for better readability */
-@media (max-width: 767px) {
-  .hero-stats-grid {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
 }
 .hero-stats-grid .stat-cell {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: 12px 8px;
-}
-.hero-stats-grid .stat-cell + .stat-cell:nth-child(2n+1) {
-  /* odd cells after 1st get no extra left border — handled by grid */
+  gap: 4px;
+  padding: 16px 14px;
 }
 .hero-stats-grid .stat-value {
- font-size: 1.5rem;
+  font-size: 1.5rem;
   font-weight: 800;
   line-height: 1.1;
   color: white;
 }
 .hero-stats-grid .stat-label {
   font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.55);
   font-weight: 500;
   letter-spacing: 0.01em;
 }
@@ -400,10 +389,10 @@
     font-size: 1.875rem;
   }
   .hero-stats-grid .stat-label {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
   }
   .hero-stats-grid .stat-cell {
-    padding: 20px 12px;
+    padding: 22px 24px;
   }
 }
 
