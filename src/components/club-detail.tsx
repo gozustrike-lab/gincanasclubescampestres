@@ -131,18 +131,18 @@ export default function ClubDetail({ club }: { club: ClubData }) {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.45, duration: 0.45 }}
-            className="max-w-md mx-auto space-y-3"
+            className="max-w-sm mx-auto space-y-3"
           >
             {/* CTA 1: Cotizar Club */}
             <a
               href={clubWaLink(club, 'club')}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-3 w-full h-[52px] md:h-[56px] bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-sm md:text-base transition-all duration-200 rounded-xl shadow-lg shadow-[#25D366]/20 hover:shadow-[#25D366]/40 hover:scale-[1.01] active:scale-[0.98]"
+              className="flex items-center justify-center gap-2.5 w-full h-[50px] md:h-[54px] bg-[#25D366] hover:bg-[#20bd5a] text-white font-semibold text-sm md:text-[0.95rem] transition-all duration-200 rounded-xl shadow-lg shadow-[#25D366]/20 hover:shadow-[#25D366]/40 hover:scale-[1.02] active:scale-[0.98]"
             >
-              <Building2 className="w-5 h-5" strokeWidth={2} />
+              <Building2 className="w-[18px] h-[18px] flex-shrink-0" strokeWidth={2} />
               Cotizar Club
-              <ArrowRight className="w-4 h-4 ml-auto" strokeWidth={2.5} />
+              <ArrowRight className="w-4 h-4 flex-shrink-0" strokeWidth={2.5} />
             </a>
 
             {/* CTA 2: Cotizar Transporte */}
@@ -150,11 +150,11 @@ export default function ClubDetail({ club }: { club: ClubData }) {
               href={clubWaLink(club, 'transporte')}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-3 w-full h-[52px] md:h-[56px] bg-[#064e3b] hover:bg-[#053d2e] text-white font-bold text-sm md:text-base transition-all duration-200 rounded-xl shadow-lg shadow-emerald-900/30 hover:shadow-emerald-900/50 hover:scale-[1.01] active:scale-[0.98]"
+              className="flex items-center justify-center gap-2.5 w-full h-[50px] md:h-[54px] bg-[#064e3b] hover:bg-[#053d2e] text-white font-semibold text-sm md:text-[0.95rem] transition-all duration-200 rounded-xl shadow-lg shadow-emerald-900/30 hover:shadow-emerald-900/50 hover:scale-[1.02] active:scale-[0.98]"
             >
-              <Bus className="w-5 h-5" strokeWidth={2} />
+              <Bus className="w-[18px] h-[18px] flex-shrink-0" strokeWidth={2} />
               Cotizar Transporte
-              <ArrowRight className="w-4 h-4 ml-auto" strokeWidth={2.5} />
+              <ArrowRight className="w-4 h-4 flex-shrink-0" strokeWidth={2.5} />
             </a>
 
             {/* CTA 3: Cotizar Club + Transporte */}
@@ -162,11 +162,11 @@ export default function ClubDetail({ club }: { club: ClubData }) {
               href={clubWaLink(club, 'ambos')}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-3 w-full h-[52px] md:h-[56px] bg-gold hover:bg-gold-dark text-emerald-dark font-bold text-sm md:text-base transition-all duration-200 rounded-xl shadow-lg shadow-gold/20 hover:shadow-gold/40 hover:scale-[1.01] active:scale-[0.98]"
+              className="flex items-center justify-center gap-2.5 w-full h-[50px] md:h-[54px] bg-gold hover:bg-gold-dark text-emerald-dark font-semibold text-sm md:text-[0.95rem] transition-all duration-200 rounded-xl shadow-lg shadow-gold/20 hover:shadow-gold/40 hover:scale-[1.02] active:scale-[0.98]"
             >
-              <MessageCircle className="w-5 h-5" strokeWidth={2} />
+              <MessageCircle className="w-[18px] h-[18px] flex-shrink-0" strokeWidth={2} />
               Cotizar Club y Transporte
-              <ArrowRight className="w-4 h-4 ml-auto" strokeWidth={2.5} />
+              <ArrowRight className="w-4 h-4 flex-shrink-0" strokeWidth={2.5} />
             </a>
           </motion.div>
 

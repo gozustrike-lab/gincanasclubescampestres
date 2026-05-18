@@ -46,8 +46,8 @@ export default function ClubesSection() {
       </div>
 
       {/* Club Cards Grid — Full Immersive */}
-      <div className="container mx-auto md:px-6 pb-16 md:pb-24">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
+      <div className="pb-16 md:pb-24">
+        <div className="flex flex-col gap-6 px-4 py-6 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6 sm:py-0 lg:grid-cols-3 xl:grid-cols-4 md:gap-5 container mx-auto">
           {CLUBS.map((club, i) => (
             <motion.div
               key={club.slug}
@@ -60,7 +60,7 @@ export default function ClubesSection() {
             >
               {/* FULL CARD — Image-first immersive design */}
               <div
-                className="relative overflow-hidden sm:rounded-2xl border-b sm:border border-border/60 h-[280px] sm:h-[340px] md:h-[360px]"
+                className="relative overflow-hidden border-b sm:border border-border/60 aspect-[4/3] sm:aspect-auto sm:h-[340px] md:h-[360px]"
                 style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}
               >
                 {/* Image */}
@@ -79,7 +79,7 @@ export default function ClubesSection() {
                 <div className="absolute inset-0 bg-gradient-to-br from-black/10 to-transparent" />
 
                 {/* Content at bottom */}
-                <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-5 md:p-5">
+                <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-5 md:p-5">
                   {/* Features pills */}
                   <div className="flex flex-wrap gap-1.5 mb-3">
                     {club.features.slice(0, 3).map((f) => (
