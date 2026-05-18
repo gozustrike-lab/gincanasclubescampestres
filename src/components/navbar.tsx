@@ -17,10 +17,10 @@ const SCROLL_THRESHOLD = 50;
 
 const navLinks = [
   { label: 'Inicio', href: '/' },
-  { label: 'Nosotros', href: '/nosotros' },
   { label: 'Clubes', href: '/clubes' },
   { label: 'Paseos Escolares', href: '/paseos-escolares' },
   { label: 'Servicios', href: '/servicios' },
+  { label: 'Nosotros', href: '/nosotros' },
   { label: 'Contacto', href: '/contacto' },
 ];
 

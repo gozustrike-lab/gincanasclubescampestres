@@ -1,426 +1,306 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
 import {
-  Users, Waves, Dumbbell, TreePine, UtensilsCrossed,
-  Music, Wifi, Car, Search, X, ChevronRight, Star
+  MapPin, X, MessageCircle, Bus, Building2,
+  ArrowRight, ChevronDown, Phone
 } from 'lucide-react';
 import Image from 'next/image';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { CLUBS, type ClubData } from '@/lib/clubs-data';
+import { WA_NUMBER } from '@/lib/whatsapp';
 
-type CapacityFilter = 'all' | 'small' | 'medium' | 'large';
-type AmenityFilter = 'all' | 'pool' | 'spa' | 'hall' | 'sports';
-
-interface Club {
-  id: string;
-  name: string;
-  location: string;
-  capacity: 'small' | 'medium' | 'large';
-  capacityLabel: string;
-  amenities: string[];
-  amenitiesList: { icon: typeof Users; label: string }[];
-  color: string;
-  distance: string;
-  description: string;
-  vip: boolean;
-  image: string;
+/* ─── WhatsApp Message Builder ─── */
+function encodeWa(text: string): string {
+  return encodeURIComponent(text).replace(/%2A/g, '*');
 }
 
-const clubs: Club[] = [
-  {
-    id: 'club-1',
-    name: 'Hacienda San Miguel',
-    location: 'Chosica, Lima',
-    capacity: 'large',
-    capacityLabel: 'Hasta 500 personas',
-    amenities: ['pool', 'hall', 'sports', 'wifi'],
-    amenitiesList: [
-      { icon: Waves, label: 'Piscina' },
-      { icon: Music, label: 'Salón Eventos' },
-      { icon: Dumbbell, label: 'Deportes' },
-      { icon: Wifi, label: 'WiFi' },
-    ],
-    color: 'from-emerald-deep to-emerald-deep/80',
-    distance: '45 min de Lima',
-    description: 'Nuestro club insignia con capacidad para grandes eventos corporativos.',
-    vip: true,
-    image: '/images/clubes/club-golf.webp',
-  },
-  {
-    id: 'club-2',
-    name: 'Villa Verde Premium',
-    location: 'Cieneguilla, Lima',
-    capacity: 'medium',
-    capacityLabel: 'Hasta 250 personas',
-    amenities: ['pool', 'spa', 'hall', 'wifi'],
-    amenitiesList: [
-      { icon: Waves, label: 'Piscina' },
-      { icon: Star, label: 'Spa' },
-      { icon: Music, label: 'Salón Eventos' },
-      { icon: Wifi, label: 'WiFi' },
-    ],
-    color: 'from-emerald-deep/90 to-emerald-deep/70',
-    distance: '50 min de Lima',
-    description: 'Ambiente exclusivo ideal para eventos de categoría premium.',
-    vip: true,
-    image: '/images/clubes/club-piscina.webp',
-  },
-  {
-    id: 'club-3',
-    name: 'Rancho del Sol',
-    location: 'Chaclacayo, Lima',
-    capacity: 'large',
-    capacityLabel: 'Hasta 450 personas',
-    amenities: ['pool', 'sports', 'hall'],
-    amenitiesList: [
-      { icon: Waves, label: 'Piscina' },
-      { icon: Dumbbell, label: 'Deportes' },
-      { icon: Music, label: 'Salón Eventos' },
-    ],
-    color: 'from-emerald-deep/85 to-emerald-deep/65',
-    distance: '40 min de Lima',
-    description: 'Amplios espacios verdes y áreas de recreación al aire libre.',
-    vip: false,
-    image: '/images/clubes/club-deportes.webp',
-  },
-  {
-    id: 'club-4',
-    name: 'El Encanto Eco',
-    location: 'San Jerónimo, Cusco',
-    capacity: 'medium',
-    capacityLabel: 'Hasta 200 personas',
-    amenities: ['pool', 'spa', 'sports'],
-    amenitiesList: [
-      { icon: Waves, label: 'Piscina' },
-      { icon: Star, label: 'Spa' },
-      { icon: Dumbbell, label: 'Deportes' },
-    ],
-    color: 'from-emerald-deep/80 to-emerald-deep/60',
-    distance: 'Cusco',
-    description: 'Inmersión en la naturaleza con instalaciones modernas.',
-    vip: true,
-    image: '/images/clubes/club-naturaleza.webp',
-  },
-  {
-    id: 'club-5',
-    name: 'La Quintrala Resort',
-    location: 'Lurín, Lima',
-    capacity: 'small',
-    capacityLabel: 'Hasta 120 personas',
-    amenities: ['pool', 'spa', 'wifi'],
-    amenitiesList: [
-      { icon: Waves, label: 'Piscina' },
-      { icon: Star, label: 'Spa' },
-      { icon: Wifi, label: 'WiFi' },
-    ],
-    color: 'from-gold/90 to-gold/70',
-    distance: '35 min de Lima',
-    description: 'Exclusividad y privacidad para eventos íntimos de alto nivel.',
-    vip: true,
-    image: '/images/clubes/club-gastronomia.webp',
-  },
-  {
-    id: 'club-6',
-    name: 'Campestre del Sur',
-    location: 'Mala, Lima',
-    capacity: 'large',
-    capacityLabel: 'Hasta 400 personas',
-    amenities: ['pool', 'sports', 'hall', 'wifi'],
-    amenitiesList: [
-      { icon: Waves, label: 'Piscina' },
-      { icon: Dumbbell, label: 'Deportes' },
-      { icon: Music, label: 'Salón Eventos' },
-      { icon: Wifi, label: 'WiFi' },
-    ],
-    color: 'from-emerald-deep/75 to-emerald-deep/55',
-    distance: '1 hr de Lima',
-    description: 'Infraestructura completa para eventos académicos y corporativos.',
-    vip: false,
-    image: '/images/clubes/club-eventos.webp',
-  },
-  {
-    id: 'club-7',
-    name: 'Paraiso Andino',
-    location: 'Urubamba, Cusco',
-    capacity: 'small',
-    capacityLabel: 'Hasta 100 personas',
-    amenities: ['pool', 'spa'],
-    amenitiesList: [
-      { icon: Waves, label: 'Piscina' },
-      { icon: Star, label: 'Spa' },
-    ],
-    color: 'from-gold/80 to-gold/60',
-    distance: 'Valle Sagrado',
-    description: 'Entorno andino único con servicios de primer nivel.',
-    vip: true,
-    image: '/images/clubes/club-familia.webp',
-  },
-  {
-    id: 'club-8',
-    name: 'El Oasis del Valle',
-    location: 'Ica',
-    capacity: 'medium',
-    capacityLabel: 'Hasta 280 personas',
-    amenities: ['pool', 'hall', 'sports'],
-    amenitiesList: [
-      { icon: Waves, label: 'Piscina' },
-      { icon: Music, label: 'Salón Eventos' },
-      { icon: Dumbbell, label: 'Deportes' },
-    ],
-    color: 'from-emerald-deep/70 to-emerald-deep/50',
-    distance: '3 hrs de Lima',
-    description: 'Destino exclusivo en el sur con clima privilegiado todo el año.',
-    vip: false,
-    image: '/images/clubes/club-corporativo.webp',
-  },
-];
+function clubWaLink(club: ClubData, type: 'club' | 'transporte' | 'ambos') {
+  const base = `Hola equipo *Gincanas Clubes Campestres* \ud83d\udc4b`;
+  const messages = {
+    club: `${base}\n\nMe interesa cotizar el *${club.name}* \ud83c\udfe0\nUbicado en: *${club.location}*\n\nNecesito informaci\u00f3n sobre:\n\ud83d\udccd Disponibilidad de fechas\n\ud83d\udcc5 Capacidad para mi grupo\n\ud83d\udcb0 Tarifas y paquetes\n\ud83d\udcdc Servicios incluidos\n\nQuedo atento a su respuesta. \u00a1Gracias!`,
+    transporte: `${base}\n\nNecesito cotizar el servicio de *TRANSPORTE* para mi evento en el *${club.name}* \ud83d\ude97\n\nDatos del traslado:\n\ud83d\udccd Punto de partida:\n\ud83d\udcc5 Fecha del evento:\n\ud83d\udc65 N\u00famero de pasajeros:\n\u23f0 Hora de recojo preferida:\n\nQuedo atento a la cotizaci\u00f3n. \u00a1Gracias!`,
+    ambos: `${base}\n\nQuisiera cotizar el *PAQUETE COMPLETO*: *${club.name}* + *TRANSPORTE* \ud83d\ude80\n\nDetalles del evento:\n\ud83d\udccd Club: *${club.name}* (${club.location})\n\ud83d\udcc5 Fecha estimada:\n\ud83d\udc65 Cantidad de personas:\n\ud83c\udfe5 Tipo de evento: Corporativo / Escolar / Social\n\nSolicito:\n\u2705 Cotizaci\u00f3n del club\n\u2705 Cotizaci\u00f3n del transporte\n\u2705 Itinerario sugerido\n\nQuedo atento. \u00a1Gracias!`,
+  };
+  return `https://wa.me/${WA_NUMBER}?text=${encodeWa(messages[type])}`;
+}
 
+/* ═══════════════════════════════════════════════════════
+   CLUB MODAL — Full-screen immersive overlay
+   ═══════════════════════════════════════════════════════ */
+function ClubModal({ club, onClose }: { club: ClubData; onClose: () => void }) {
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
+        className="fixed inset-0 z-[99998] bg-black/60"
+        style={{
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+        }}
+        onClick={onClose}
+      />
+      <motion.div
+        initial={{ opacity: 0, y: 80, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 80, scale: 0.97 }}
+        transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+        className="fixed inset-2 sm:inset-4 md:inset-8 lg:inset-12 z-[99999] flex flex-col overflow-hidden rounded-2xl md:rounded-3xl"
+        style={{
+          background: 'linear-gradient(180deg, #0a1a14 0%, #022c22 40%, #011a12 100%)',
+          boxShadow: '0 25px 80px rgba(0,0,0,0.6)',
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-all duration-200 backdrop-blur-sm"
+          aria-label="Cerrar modal"
+        >
+          <X className="w-5 h-5" strokeWidth={2} />
+        </button>
+
+        {/* Hero Image */}
+        <div className="relative w-full h-[35vh] sm:h-[40vh] md:h-[45vh] flex-shrink-0 overflow-hidden">
+          <div className={`absolute inset-0 bg-gradient-to-br ${club.gradient}`} />
+          <Image
+            src={club.image}
+            alt={club.name}
+            fill
+            priority
+            quality={90}
+            className="object-cover"
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#022c22] via-transparent to-black/30" />
+
+          {/* Club Name Overlay */}
+          <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+            >
+              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/10 px-3 py-1.5 rounded-full mb-3">
+                <MapPin className="w-3.5 h-3.5 text-gold" strokeWidth={2} />
+                <span className="text-xs text-white/80 font-medium">{club.location}</span>
+              </div>
+              <h2 className="font-heading font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white leading-tight">
+                {club.name}
+              </h2>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto px-5 sm:px-8 md:px-12 py-6 md:py-8">
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.4 }}
+            className="text-white/70 text-sm md:text-base leading-relaxed mb-6 md:mb-8 max-w-3xl"
+          >
+            {club.description}
+          </motion.p>
+
+          {/* Features */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.4 }}
+            className="flex flex-wrap gap-2 mb-8 md:mb-10"
+          >
+            {club.features.map((f) => (
+              <span
+                key={f}
+                className="inline-flex items-center gap-1.5 text-xs font-medium text-gold bg-gold/10 border border-gold/20 px-3 py-1.5 rounded-full"
+              >
+                <span className="w-1 h-1 bg-gold rounded-full" />
+                {f}
+              </span>
+            ))}
+          </motion.div>
+
+          {/* ── 3 CTA Buttons ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.4 }}
+            className="space-y-3 max-w-lg"
+          >
+            {/* CTA 1: Cotizar Club */}
+            <a
+              href={clubWaLink(club, 'club')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-3 w-full h-[52px] md:h-[56px] bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-sm md:text-base transition-all duration-200 rounded-xl shadow-lg shadow-[#25D366]/20 hover:shadow-[#25D366]/40 hover:scale-[1.01] active:scale-[0.98]"
+            >
+              <Building2 className="w-5 h-5" strokeWidth={2} />
+              Cotizar Club
+              <ArrowRight className="w-4 h-4 ml-auto" strokeWidth={2.5} />
+            </a>
+
+            {/* CTA 2: Cotizar Transporte */}
+            <a
+              href={clubWaLink(club, 'transporte')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-3 w-full h-[52px] md:h-[56px] bg-[#064e3b] hover:bg-[#053d2e] text-white font-bold text-sm md:text-base transition-all duration-200 rounded-xl shadow-lg shadow-emerald-900/30 hover:shadow-emerald-900/50 hover:scale-[1.01] active:scale-[0.98]"
+            >
+              <Bus className="w-5 h-5" strokeWidth={2} />
+              Cotizar Transporte
+              <ArrowRight className="w-4 h-4 ml-auto" strokeWidth={2.5} />
+            </a>
+
+            {/* CTA 3: Cotizar Club + Transporte */}
+            <a
+              href={clubWaLink(club, 'ambos')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-3 w-full h-[52px] md:h-[56px] bg-gold hover:bg-gold-dark text-emerald-dark font-bold text-sm md:text-base transition-all duration-200 rounded-xl shadow-lg shadow-gold/20 hover:shadow-gold/40 hover:scale-[1.01] active:scale-[0.98]"
+            >
+              <MessageCircle className="w-5 h-5" strokeWidth={2} />
+              Cotizar Club y Transporte
+              <ArrowRight className="w-4 h-4 ml-auto" strokeWidth={2.5} />
+            </a>
+          </motion.div>
+
+          {/* Bottom safe area for mobile */}
+          <div className="h-8" />
+        </div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
+   CLUBES SECTION — Full Immersive Cards Grid
+   ═══════════════════════════════════════════════════════ */
 export default function ClubesSection() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const [capacityFilter, setCapacityFilter] = useState<CapacityFilter>('all');
-  const [amenityFilter, setAmenityFilter] = useState<AmenityFilter>('all');
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const filteredClubs = clubs.filter((club) => {
-    const matchCapacity = capacityFilter === 'all' || club.capacity === capacityFilter;
-    const matchAmenity = amenityFilter === 'all' || club.amenities.includes(amenityFilter);
-    const matchSearch =
-      searchTerm === '' ||
-      club.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      club.location.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchCapacity && matchAmenity && matchSearch;
-  });
-
-  const clearFilters = () => {
-    setCapacityFilter('all');
-    setAmenityFilter('all');
-    setSearchTerm('');
-  };
+  const isInView = useInView(ref, { once: true, margin: '-80px' });
+  const [selectedClub, setSelectedClub] = useState<ClubData | null>(null);
 
   return (
-    <section id="clubes" className="py-20 md:py-28 bg-corporate-gray" ref={ref}>
-      <div className="container mx-auto px-4 md:px-6">
+    <>
+      <section className="bg-corporate-gray" ref={ref}>
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-3xl mx-auto mb-12"
-        >
-          <Badge variant="secondary" className="bg-emerald-light text-emerald-deep font-medium mb-4">
-            Red Exclusiva
-          </Badge>
-          <h2 className="font-heading font-extrabold text-3xl md:text-4xl lg:text-5xl text-emerald-dark mb-6">
-            Nuestra Colección de{' '}
-            <span className="text-gold">Clubes Élite</span>
-          </h2>
-          <p className="text-corporate-text/70 text-lg">
-            Cada uno de nuestros 8 clubes ha sido seleccionado por su excelencia,
-            ubicación privilegiada y capacidad para crear experiencias memorables.
-          </p>
-        </motion.div>
-
-        {/* Filters */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="bg-white rounded-2xl p-4 md:p-6 mb-10 md:mb-[40px] shadow-sm border border-border"
-        >
-          <div className="flex flex-col md:flex-row gap-4">
-            {/* Search */}
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-corporate-text/40" />
-              <input
-                type="text"
-                placeholder="Buscar por nombre o ubicación..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-              />
+        <div className="pt-[120px] pb-8 md:pb-12">
+          <nav className="container mx-auto px-5 md:px-8 mb-6">
+            <div className="flex items-center gap-1.5 text-xs text-corporate-text/40">
+              <a href="/" className="hover:text-gold transition-colors">Inicio</a>
+              <span>/</span>
+              <span className="text-emerald-deep/60">Clubes</span>
             </div>
+          </nav>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
+            className="text-center max-w-3xl mx-auto px-5 md:px-8"
+          >
+            <h1 className="font-heading font-extrabold text-3xl md:text-4xl lg:text-5xl text-emerald-dark mb-4">
+              Nuestra Red de{' '}
+              <span className="text-gold-gradient">Clubes Campestres</span>
+            </h1>
+            <p className="text-corporate-text/60 text-sm md:text-base leading-relaxed">
+              Explore nuestra colección exclusiva de {CLUBS.length} clubes campestres cuidadosamente seleccionados.
+              Cada uno ofrece experiencias únicas para eventos corporativos, paseos escolares y celebraciones especiales.
+            </p>
+          </motion.div>
+        </div>
 
-            {/* Capacity filter */}
-            <div className="flex gap-3 flex-wrap">
-              <Button
-                variant={capacityFilter === 'all' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setCapacityFilter('all')}
-                className={capacityFilter === 'all' ? 'bg-emerald-deep hover:bg-emerald-deep/90 text-white' : ''}
+        {/* Club Cards Grid — Full Immersive */}
+        <div className="container mx-auto px-4 md:px-6 pb-16 md:pb-24">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
+            {CLUBS.map((club, i) => (
+              <motion.div
+                key={club.slug}
+                initial={{ opacity: 0, y: 25 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.4, delay: 0.15 + i * 0.04 }}
+                whileHover={{ y: -6, transition: { duration: 0.25 } }}
+                className="group cursor-pointer"
+                onClick={() => setSelectedClub(club)}
               >
-                Todos
-              </Button>
-              <Button
-                variant={capacityFilter === 'small' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setCapacityFilter('small')}
-                className={capacityFilter === 'small' ? 'bg-emerald-deep hover:bg-emerald-deep/90 text-white' : ''}
-              >
-                <Users className="h-3.5 w-3.5 mr-1" /> Pequeño
-              </Button>
-              <Button
-                variant={capacityFilter === 'medium' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setCapacityFilter('medium')}
-                className={capacityFilter === 'medium' ? 'bg-emerald-deep hover:bg-emerald-deep/90 text-white' : ''}
-              >
-                <Users className="h-3.5 w-3.5 mr-1" /> Mediano
-              </Button>
-              <Button
-                variant={capacityFilter === 'large' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setCapacityFilter('large')}
-                className={capacityFilter === 'large' ? 'bg-emerald-deep hover:bg-emerald-deep/90 text-white' : ''}
-              >
-                <Users className="h-3.5 w-3.5 mr-1" /> Grande
-              </Button>
-            </div>
-
-            {/* Amenity filter */}
-            <div className="flex gap-3 flex-wrap">
-              <Button
-                variant={amenityFilter === 'all' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setAmenityFilter('all')}
-                className={amenityFilter === 'all' ? 'bg-gold hover:bg-gold-dark text-emerald-dark' : ''}
-              >
-                Todas
-              </Button>
-              <Button
-                variant={amenityFilter === 'pool' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setAmenityFilter('pool')}
-                className={amenityFilter === 'pool' ? 'bg-gold hover:bg-gold-dark text-emerald-dark' : ''}
-              >
-                <Waves className="h-3.5 w-3.5 mr-1" /> Piscina
-              </Button>
-              <Button
-                variant={amenityFilter === 'spa' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setAmenityFilter('spa')}
-                className={amenityFilter === 'spa' ? 'bg-gold hover:bg-gold-dark text-emerald-dark' : ''}
-              >
-                <Star className="h-3.5 w-3.5 mr-1" /> Spa
-              </Button>
-              <Button
-                variant={amenityFilter === 'hall' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setAmenityFilter('hall')}
-                className={amenityFilter === 'hall' ? 'bg-gold hover:bg-gold-dark text-emerald-dark' : ''}
-              >
-                <Music className="h-3.5 w-3.5 mr-1" /> Salón
-              </Button>
-            </div>
-
-            {/* Clear */}
-            {(capacityFilter !== 'all' || amenityFilter !== 'all' || searchTerm) && (
-              <Button variant="ghost" size="sm" onClick={clearFilters} className="text-corporate-text/60">
-                <X className="h-4 w-4 mr-1" /> Limpiar
-              </Button>
-            )}
-          </div>
-        </motion.div>
-
-        {/* Club Grid — 2 col mobile, 3 tablet, 4 desktop */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 mt-2">
-          {filteredClubs.map((club, i) => (
-            <motion.div
-              key={club.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.4, delay: 0.3 + i * 0.05 }}
-              whileHover={{ y: -8 }}
-              style={{ transition: 'box-shadow 0.3s ease, transform 0.3s ease' }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 30px rgba(6,78,59,0.12), 0 4px 8px rgba(0,0,0,0.06)';
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03)';
-              }}
-            >
-              <Card className="overflow-hidden border border-border h-full flex flex-col" style={{ borderRadius: '16px' }}>
-                {/* Club image — 16:9 on mobile (aspect-video), taller on PC */}
-                <div className={`h-48 sm:h-44 md:h-48 bg-gradient-to-br ${club.color} relative overflow-hidden`}>
+                {/* FULL CARD — Image-first immersive design */}
+                <div
+                  className="relative overflow-hidden rounded-2xl border border-border/60 h-[320px] sm:h-[340px] md:h-[360px]"
+                  style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}
+                >
+                  {/* Image */}
                   <Image
                     src={club.image}
                     alt={`${club.name} — ${club.location}`}
                     fill
                     loading="lazy"
-                    quality={85}
+                    quality={80}
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    className="object-cover club-card-image"
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  {/* Bottom gradient for readability */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
-                  
-                  {/* VIP Badge — Glassmorphism */}
-                  {club.vip && (
-                    <span className="absolute top-3 right-3 text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full text-gold"
-                      style={{ background: 'rgba(180,148,92,0.20)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', border: '1px solid rgba(180,148,92,0.30)' }}
-                    >
-                      VIP
-                    </span>
-                  )}
-                  
-                  {/* Distance Badge — Glassmorphism */}
-                  <span className="absolute bottom-3 left-3 text-[10px] font-medium text-white flex items-center gap-1 px-2.5 py-1 rounded-full"
-                    style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.15)' }}
-                  >
-                    <Car className="h-3 w-3" />{club.distance}
-                  </span>
-                </div>
-                <CardContent className="p-4 md:p-5 flex flex-col flex-1">
-                  <h3 className="font-heading font-bold text-base md:text-lg text-emerald-dark mb-1">{club.name}</h3>
-                  <p className="text-xs md:text-sm text-corporate-text/60 mb-2 md:mb-3 flex items-center gap-1">
-                    <span className="inline-block w-1.5 h-1.5 bg-gold rounded-full" />
-                    {club.location}
-                  </p>
-                  <p className="text-xs md:text-sm text-corporate-text/70 mb-3 flex-1 hidden sm:block">{club.description}</p>
-                  
-                  {/* Compact amenity icons — fine linear style */}
-                  <div className="flex flex-wrap gap-1.5 mb-3 md:mb-4">
-                    {club.amenitiesList.map((a) => (
-                      <span key={a.label} className="inline-flex items-center gap-1 text-[10px] md:text-xs text-emerald-dark/60 font-medium">
-                        <a.icon className="h-3 w-3 md:h-3.5 md:w-3.5" strokeWidth={1.5} />
-                        {a.label}
-                      </span>
-                    ))}
-                  </div>
-                  
-                  <div className="flex items-center justify-between mt-auto pt-1">
-                    <span className="text-[10px] md:text-xs text-corporate-text/50 font-medium flex items-center gap-1">
-                      <Users className="h-3 w-3 md:h-3.5 md:w-3.5" strokeWidth={1.5} />
-                      {club.capacityLabel}
-                    </span>
-                    <Button size="sm" variant="ghost" className="text-emerald-deep hover:text-emerald-deep hover:bg-emerald-light p-0 h-auto font-semibold text-xs md:text-sm">
-                      Ver Detalles <ChevronRight className="h-3.5 w-3.5 md:h-4 md:w-4 ml-0.5" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
 
-        {filteredClubs.length === 0 && (
-          <div className="text-center py-16">
-            <Search className="h-12 w-12 text-corporate-text/20 mx-auto mb-4" />
-            <h3 className="font-heading font-bold text-xl text-corporate-text/40 mb-2">
-              No se encontraron clubes
-            </h3>
-            <p className="text-sm text-corporate-text/40 mb-4">
-              Intenta ajustar los filtros de búsqueda
-            </p>
-            <Button variant="outline" onClick={clearFilters}>
-              Limpiar Filtros
-            </Button>
+                  {/* Gradient overlays */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-black/10 to-transparent" />
+
+                  {/* Content at bottom */}
+                  <div className="absolute inset-0 flex flex-col justify-end p-4 md:p-5">
+                    {/* Features pills */}
+                    <div className="flex flex-wrap gap-1.5 mb-3">
+                      {club.features.slice(0, 3).map((f) => (
+                        <span
+                          key={f}
+                          className="text-[10px] font-medium text-white/75 bg-white/10 backdrop-blur-sm border border-white/10 px-2 py-0.5 rounded-full"
+                        >
+                          {f}
+                        </span>
+                      ))}
+                      {club.features.length > 3 && (
+                        <span className="text-[10px] font-medium text-white/60 bg-white/10 backdrop-blur-sm px-2 py-0.5 rounded-full">
+                          +{club.features.length - 3}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Name */}
+                    <h3 className="font-heading font-bold text-lg md:text-xl text-white leading-tight mb-1">
+                      {club.name}
+                    </h3>
+
+                    {/* Location */}
+                    <div className="flex items-center gap-1.5 text-white/60">
+                      <MapPin className="w-3 h-3" strokeWidth={2} />
+                      <span className="text-xs font-medium">{club.location}</span>
+                    </div>
+                  </div>
+
+                  {/* Hover overlay — "Ver Club" indicator */}
+                  <div className="absolute inset-0 bg-emerald-deep/0 group-hover:bg-emerald-deep/30 transition-colors duration-300 flex items-center justify-center">
+                    <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
+                      <div className="flex items-center gap-2 bg-white/15 backdrop-blur-md border border-white/20 px-5 py-2.5 rounded-full">
+                        <span className="text-white font-bold text-sm">Ver Club</span>
+                        <ArrowRight className="w-4 h-4 text-gold" strokeWidth={2.5} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
+        </div>
+      </section>
+
+      {/* Modal */}
+      <AnimatePresence>
+        {selectedClub && (
+          <ClubModal club={selectedClub} onClose={() => setSelectedClub(null)} />
         )}
-      </div>
-    </section>
+      </AnimatePresence>
+    </>
   );
 }
