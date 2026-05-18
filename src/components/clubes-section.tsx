@@ -47,7 +47,7 @@ export default function ClubesSection() {
 
       {/* Club Cards Grid — Full Immersive */}
       <div className="pb-16 md:pb-24">
-        <div className="flex flex-col gap-6 px-4 py-6 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6 sm:py-0 lg:grid-cols-3 xl:grid-cols-4 md:gap-5 container mx-auto">
+        <div className="flex flex-col gap-6 px-3.5 py-5 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6 sm:py-0 lg:grid-cols-3 xl:grid-cols-4 md:gap-5 container mx-auto">
           {CLUBS.map((club, i) => (
             <motion.div
               key={club.slug}
@@ -60,8 +60,8 @@ export default function ClubesSection() {
             >
               {/* FULL CARD — Image-first immersive design */}
               <div
-                className="relative overflow-hidden border-b sm:border border-border/60 aspect-[4/3] sm:aspect-auto sm:h-[340px] md:h-[360px]"
-                style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}
+                className="relative w-full overflow-hidden border-b sm:border border-border/60 aspect-[16/10] sm:aspect-auto sm:h-[340px] md:h-[360px]"
+                style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.06)', borderRadius: '14px' }}
               >
                 {/* Image */}
                 <Image
