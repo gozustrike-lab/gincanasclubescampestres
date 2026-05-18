@@ -60,14 +60,14 @@ export const CLUBS: ClubData[] = [
     gradient: 'from-emerald-deep to-emerald-deep/80',
   },
   {
-    slug: 'club-samafia',
-    name: 'Club Samafía',
-    shortName: 'Samafía',
+    slug: 'club-samaña',
+    name: 'Club Samaña',
+    shortName: 'Samaña',
     location: 'Lima',
     description:
       'Club campestre tranquilo, ideal para integraciones y familias que buscan un ambiente relajado en plena naturaleza. Perfecto para retiros corporativos y talleres de team building.',
     features: ['Ambiente tranquilo', 'Áreas verdes', 'Zonas de integración', 'Canchas deportivas'],
-    image: '/images/clubes/club-samafia.webp',
+    image: '/images/clubes/club-samaña.webp',
     gradient: 'from-emerald-dark to-emerald-deep',
   },
   {
