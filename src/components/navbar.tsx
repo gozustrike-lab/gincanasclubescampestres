@@ -258,7 +258,7 @@ export default function Navbar({ onCotizar, onPortalSocios }: NavbarProps) {
             }}
           >
             {/* ── Drawer Header ── */}
-            <div className="flex items-center justify-between px-7 pt-6 pb-5 border-b border-white/[0.06]">
+            <div className="flex items-center justify-between px-6 pt-6 pb-5 border-b border-white/[0.06]">
               <Link href="/" onClick={closeDrawer} className="flex flex-col items-start">
                 <span className="font-heading font-extrabold text-xl text-gold leading-none tracking-wide">
                   GINCANAS
@@ -277,18 +277,18 @@ export default function Navbar({ onCotizar, onPortalSocios }: NavbarProps) {
             </div>
 
             {/* ── Nav Links ── */}
-            <div className="flex-1 overflow-y-auto px-3 py-3">
-              <nav className="flex flex-col" style={{ gap: '6px' }}>
+            <div className="flex-1 overflow-y-auto px-5 py-4">
+              <nav className="flex flex-col" style={{ gap: '4px' }}>
                 {navLinks.map((link, idx) => (
                   <Link
                     key={link.href}
                     href={link.href}
                     onClick={closeDrawer}
                     className={cn(
-                      'group flex items-center px-4 h-[56px] text-[1.05rem] font-bold tracking-[0.01em] transition-all duration-200 rounded-xl mx-1',
+                      'group flex items-center px-5 h-[52px] text-[1rem] font-semibold tracking-[0.01em] transition-all duration-200 rounded-2xl',
                       isActive(link.href)
-                        ? 'text-gold bg-white/[0.04]'
-                        : 'text-white/85 hover:text-gold hover:bg-white/[0.03] opacity-70 hover:opacity-100'
+                        ? 'text-gold bg-white/[0.05] border border-gold/10'
+                        : 'text-white/80 hover:text-gold hover:bg-white/[0.03] opacity-60 hover:opacity-100'
                     )}
                   >
                     <span className="relative">
@@ -310,7 +310,7 @@ export default function Navbar({ onCotizar, onPortalSocios }: NavbarProps) {
             </div>
 
             {/* ── Drawer Footer / CTA Zone ── */}
-            <div className="px-5 pb-10 pt-4 space-y-3 border-t border-white/[0.06]">
+            <div className="px-6 pb-10 pt-5 space-y-3 border-t border-white/[0.06]">
               {/* VIP — Portal Socios */}
               <button
                 onClick={() => { onPortalSocios(); closeDrawer(); }}
