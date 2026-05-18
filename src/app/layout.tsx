@@ -48,7 +48,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Gincanas Clubes Campestres | Eventos para Instituciones Élite",
     description:
-      "Logística y eventos premium en los 8 clubes campestres más exclusivos de Lima.",
+      "Red de 14 clubes campestres exclusivos. Gestión de eventos de alto impacto para corporativos, colegios y universidades.",
     url: "https://gincanasclubescampestres.com",
     siteName: "Gincanas Clubes Campestres",
     type: "website",
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
         url: "/og-gincanas.png",
         width: 1200,
         height: 630,
-        alt: "Gincanas Clubes Campestres — Eventos de Alto Impacto",
+        alt: "Gincanas Clubes Campestres — 14 Clubes Exclusivos para Eventos de Alto Impacto",
         type: "image/png",
       },
     ],
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Gincanas Clubes Campestres | Eventos para Instituciones Élite",
     description:
-      "Logística y eventos premium en los 8 clubes campestres más exclusivos de Lima.",
+      "Red de 14 clubes campestres exclusivos. Gestión de eventos de alto impacto para corporativos, colegios y universidades.",
     images: ["/og-gincanas.png"],
   },
   alternates: {
