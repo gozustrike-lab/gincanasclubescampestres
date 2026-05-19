@@ -95,7 +95,8 @@ const ICON_MAP: IconMatch[] = [
 
   /* ── Temporada y eventos ── */
   { keywords: ['temporada', 'estación', 'calendario', 'fecha', 'disponib'], Icon: MdCalendarViewMonth },
-  { keywords: ['evento', 'salón', 'salon', 'banquete', 'fiesta', 'celebracion'], Icon: MdEmojiEvents },
+  { keywords: ['auditorio', 'anfiteatro', 'salón', 'salon', 'teatro'], Icon: MdEmojiEvents },
+  { keywords: ['evento', 'banquete', 'fiesta', 'celebracion'], Icon: MdEmojiEvents },
   { keywords: ['show', 'espectáculo', 'espectacular', 'musica', 'música'], Icon: MdEmojiEvents },
 
   /* ── Servicios ── */
