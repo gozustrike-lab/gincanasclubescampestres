@@ -13,12 +13,12 @@ import type { ClubData } from '@/lib/clubs-data';
 import { WA_NUMBER } from '@/lib/whatsapp';
 import { getAmenityIcon } from './amenity-icons';
 
-/* ─── High-quality image URL builder (Next.js Image Optimization) ─── */
+/* ─── Image URL builder — use Next.js optimizer at high quality ─── */
 function getHdSrc(src: string): string {
   /* External URLs: use as-is */
   if (src.startsWith('http')) return src;
-  /* Local images: route through Next.js optimizer at max quality */
-  return `/_next/image?url=${encodeURIComponent(src)}&w=3840&q=95`;
+  /* Local images: route through Next.js optimizer, quality 95 */
+  return `/_next/image?url=${encodeURIComponent(src)}&q=95`;
 }
 
 /* ─── WhatsApp Message Builder ─── */
