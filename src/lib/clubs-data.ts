@@ -144,12 +144,12 @@ export const CLUBS: ClubData[] = [
     description:
       'Ubicado en el Km 27 de la Carretera Central — Chaclacayo, un espacio amplio con piscinas, áreas verdes, juegos mecánicos y zona de campamento diseñado para el descanso, la recreación y la diversión familiar. El ingreso incluye acceso libre a todas las instalaciones principales. Ideal para eventos corporativos, integraciones, paseos escolares y celebraciones especiales en un entorno natural privilegiado a minutos de Lima.',
     features: ['Piscinas', 'Áreas verdes', 'Juegos mecánicos', 'Campamento'],
-    image: '/images/clubes/club-samaña.webp',
+    image: '/images/clubes/club-samana.webp',
     gradient: 'from-emerald-dark to-emerald-deep',
     gallery: [
-      '/images/clubes/club-samaña-galeria-1.webp',
-      '/images/clubes/club-samaña-galeria-2.webp',
-      '/images/clubes/club-samaña-galeria-3.webp',
+      '/images/clubes/club-samana-galeria-1.webp',
+      '/images/clubes/club-samana-galeria-2.webp',
+      '/images/clubes/club-samana-galeria-3.webp',
     ],
     included: [
       '02 piscinas',
