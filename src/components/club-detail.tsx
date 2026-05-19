@@ -11,6 +11,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { ClubData } from '@/lib/clubs-data';
 import { WA_NUMBER } from '@/lib/whatsapp';
+import { getAmenityIcon } from './amenity-icons';
 
 /* ─── WhatsApp Message Builder ─── */
 function encodeWa(text: string): string {
@@ -452,14 +453,17 @@ export default function ClubDetail({ club }: { club: ClubData }) {
                 </h2>
               </div>
               <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-5 md:p-6 space-y-3">
-                {club.included.map((item, idx) => (
-                  <div key={idx} className="flex items-start gap-3">
-                    <div className="w-5 h-5 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <span className="w-1.5 h-1.5 bg-[#25D366] rounded-full" />
+                {club.included.map((item, idx) => {
+                  const ItemIcon = getAmenityIcon(item);
+                  return (
+                    <div key={idx} className="flex items-center gap-3">
+                      <div className="w-9 h-9 flex items-center justify-center flex-shrink-0 rounded-xl bg-[#25D366]/10 border border-[#25D366]/15">
+                        <ItemIcon className="w-[18px] h-[18px] text-[#25D366]" />
+                      </div>
+                      <span className="text-white/80 text-sm md:text-[0.95rem] leading-relaxed">{item}</span>
                     </div>
-                    <span className="text-white/75 text-sm md:text-[0.95rem] leading-relaxed">{item}</span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </motion.div>
           )}
@@ -481,13 +485,18 @@ export default function ClubDetail({ club }: { club: ClubData }) {
                 </h2>
               </div>
               <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-5 md:p-6">
-                <div className="grid grid-cols-2 gap-3">
-                  {club.extraActivities.map((item, idx) => (
-                    <div key={idx} className="flex items-center gap-2.5 bg-white/[0.03] border border-white/[0.05] rounded-xl px-4 py-3">
-                      <span className="w-1.5 h-1.5 bg-gold rounded-full flex-shrink-0" />
-                      <span className="text-white/70 text-sm leading-snug">{item}</span>
-                    </div>
-                  ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {club.extraActivities.map((item, idx) => {
+                    const ItemIcon = getAmenityIcon(item);
+                    return (
+                      <div key={idx} className="flex items-center gap-3 bg-white/[0.03] border border-white/[0.05] rounded-xl px-4 py-3">
+                        <div className="w-8 h-8 flex items-center justify-center flex-shrink-0 rounded-lg bg-gold/10 border border-gold/15">
+                          <ItemIcon className="w-4 h-4 text-gold" />
+                        </div>
+                        <span className="text-white/75 text-sm leading-snug">{item}</span>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </motion.div>
