@@ -53,10 +53,29 @@ export const CLUBS: ClubData[] = [
     shortName: 'Arrayanes',
     location: 'Lima',
     description:
-      'Entorno natural ideal para el día de campo, descanso y actividades grupales. Sus amplias zonas de esparcimiento lo convierten en la opción perfecta para paseos escolares y eventos familiares.',
-    features: ['Entorno natural', 'Áreas de descanso', 'Actividades grupales', 'Camping'],
+      'Entorno natural privilegiado con acceso al río, 03 piscinas, juegos mecánicos, minigranja y amplias áreas verdes. Ideal para el día de campo, descanso y actividades grupales. Sus amplias zonas de esparcimiento y área de campamento lo convierten en la opción perfecta para paseos escolares, eventos corporativos y celebraciones familiares.',
+    features: ['Piscinas', 'Áreas verdes', 'Río', 'Minigranja'],
     image: '/images/clubes/club-arrayanes.webp',
     gradient: 'from-emerald-deep/90 to-emerald-dark',
+    gallery: [
+      '/images/clubes/club-arrayanes-galeria-1.webp',
+      '/images/clubes/club-arrayanes-galeria-2.webp',
+      '/images/clubes/club-arrayanes-galeria-3.webp',
+    ],
+    included: [
+      '03 piscinas',
+      'Amplias áreas verdes',
+      'Juegos mecánicos',
+      'Zona deportiva',
+      'Acceso al río',
+      'Minigranja',
+      'Área de campamento',
+    ],
+    extraActivities: [
+      'Paseos en bote',
+      'Cuatrimotos',
+      'Tagada (atracción mecánica)',
+    ],
   },
   {
     slug: 'club-toboganes',
