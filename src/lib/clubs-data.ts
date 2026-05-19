@@ -137,7 +137,7 @@ export const CLUBS: ClubData[] = [
     ],
   },
   {
-    slug: 'club-samaña',
+    slug: 'club-samana',
     name: 'Club Samaña',
     shortName: 'Samaña',
     location: 'Km 27 Carretera Central — Chaclacayo',
