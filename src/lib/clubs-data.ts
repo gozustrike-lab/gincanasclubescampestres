@@ -12,6 +12,7 @@ export interface ClubData {
   features: string[];
   image: string;
   gradient: string;
+  gallery?: string[];
 }
 
 export const CLUBS: ClubData[] = [
@@ -25,6 +26,10 @@ export const CLUBS: ClubData[] = [
     features: ['Áreas verdes', 'Espacios recreativos', 'Zona de picnic', 'Estacionamiento'],
     image: '/images/clubes/club-certse.webp',
     gradient: 'from-emerald-deep to-emerald-dark',
+    gallery: [
+      '/images/clubes/club-certse-galeria-1.webp',
+      '/images/clubes/club-certse-galeria-2.webp',
+    ],
   },
   {
     slug: 'club-arrayanes',

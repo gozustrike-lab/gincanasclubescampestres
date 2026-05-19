@@ -94,8 +94,39 @@ export default function ClubDetail({ club }: { club: ClubData }) {
         </div>
       </div>
 
+      {/* ── Gallery (if available) ── */}
+      {club.gallery && club.gallery.length > 0 && (
+        <div className="container mx-auto px-5 md:px-8 py-6">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35, duration: 0.5 }}
+            className="grid grid-cols-2 gap-3 max-w-3xl mx-auto"
+          >
+            {club.gallery.map((img, idx) => (
+              <div
+                key={idx}
+                className="relative overflow-hidden rounded-xl"
+                style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.25)' }}
+              >
+                <div className="aspect-[16/10]">
+                  <Image
+                    src={img}
+                    alt={`${club.name} — Galería ${idx + 1}`}
+                    fill
+                    quality={90}
+                    className="object-cover"
+                    sizes="(max-width: 640px) 50vw, 400px"
+                  />
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      )}
+
       {/* ── Content Section ── */}
-      <div className="container mx-auto px-5 md:px-8 py-8 md:py-12">
+      <div className="container mx-auto px-5 md:px-8 pb-8 md:pb-12">
         <div className="max-w-3xl mx-auto">
 
           {/* Description */}
