@@ -13,6 +13,8 @@ export interface ClubData {
   image: string;
   gradient: string;
   gallery?: string[];
+  included?: string[];
+  extraActivities?: string[];
 }
 
 export const CLUBS: ClubData[] = [
@@ -22,13 +24,27 @@ export const CLUBS: ClubData[] = [
     shortName: 'Certse',
     location: 'Lima',
     description:
-      'Club campestre con amplias áreas verdes y espacios recreativos ideales para eventos corporativos, integraciones y días de campo. Cuenta con infraestructura completa para garantizar una experiencia inolvidable en contacto con la naturaleza.',
-    features: ['Áreas verdes', 'Espacios recreativos', 'Zona de picnic', 'Estacionamiento'],
+      'Club campestre de primer nivel con amplias áreas verdes, piscinas, zonas deportivas y una completa oferta de actividades recreativas. El ingreso incluye el uso libre de todas las áreas principales: piscinas para adultos y niños, juegos mecánicos y clásicos, canchas deportivas, zonas de parrilla y áreas de campamento. Ideal para eventos corporativos, integraciones, paseos escolares y celebraciones especiales en un entorno natural privilegiado.',
+    features: ['Piscinas', 'Áreas verdes', 'Deportes', 'Parrillas'],
     image: '/images/clubes/club-certse.webp',
     gradient: 'from-emerald-deep to-emerald-dark',
     gallery: [
       '/images/clubes/club-certse-galeria-1.webp',
       '/images/clubes/club-certse-galeria-2.webp',
+    ],
+    included: [
+      '02 piscinas para adultos y niños',
+      'Amplias áreas verdes',
+      'Juegos mecánicos y clásicos',
+      'Zona deportiva (cancha y áreas de juego)',
+      'Acceso a zonas de parrilla',
+      'Área de campamento',
+    ],
+    extraActivities: [
+      'Paseos a botes',
+      'Cuatrimotos',
+      'Paseos a caballo',
+      'Más actividades según temporada',
     ],
   },
   {

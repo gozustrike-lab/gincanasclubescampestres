@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import {
   MapPin, MessageCircle, Bus, Building2,
-  ArrowRight, ChevronRight, Home,
+  ArrowRight, ChevronRight, Home, CheckCircle2, Sparkles,
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -157,11 +157,69 @@ export default function ClubDetail({ club }: { club: ClubData }) {
             ))}
           </motion.div>
 
+          {/* ── Incluido en el Ingreso ── */}
+          {club.included && club.included.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.45 }}
+              className="mb-8 md:mb-10"
+            >
+              <div className="flex items-center gap-2.5 mb-4">
+                <div className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#25D366]/15">
+                  <CheckCircle2 className="w-[18px] h-[18px] text-[#25D366]" strokeWidth={2} />
+                </div>
+                <h2 className="font-heading font-bold text-base md:text-lg text-white">
+                  Ingreso y Áreas Incluidas
+                </h2>
+              </div>
+              <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-5 md:p-6 space-y-3">
+                {club.included.map((item, idx) => (
+                  <div key={idx} className="flex items-start gap-3">
+                    <div className="w-5 h-5 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="w-1.5 h-1.5 bg-[#25D366] rounded-full" />
+                    </div>
+                    <span className="text-white/75 text-sm md:text-[0.95rem] leading-relaxed">{item}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* ── Actividades Adicionales ── */}
+          {club.extraActivities && club.extraActivities.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.45, duration: 0.45 }}
+              className="mb-10 md:mb-14"
+            >
+              <div className="flex items-center gap-2.5 mb-4">
+                <div className="w-8 h-8 flex items-center justify-center rounded-lg bg-gold/15">
+                  <Sparkles className="w-[18px] h-[18px] text-gold" strokeWidth={2} />
+                </div>
+                <h2 className="font-heading font-bold text-base md:text-lg text-white">
+                  Actividades Recreativas Adicionales
+                </h2>
+              </div>
+              <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-5 md:p-6">
+                <div className="grid grid-cols-2 gap-3">
+                  {club.extraActivities.map((item, idx) => (
+                    <div key={idx} className="flex items-center gap-2.5 bg-white/[0.03] border border-white/[0.05] rounded-xl px-4 py-3">
+                      <span className="w-1.5 h-1.5 bg-gold rounded-full flex-shrink-0" />
+                      <span className="text-white/70 text-sm leading-snug">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+
           {/* ── 3 CTA Buttons — Centered ── */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.45, duration: 0.45 }}
+            transition={{ delay: 0.55, duration: 0.45 }}
             className="max-w-sm mx-auto space-y-3"
           >
             {/* CTA 1: Cotizar Club */}
