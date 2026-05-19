@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   MapPin, MessageCircle, Bus, Building2,
@@ -12,6 +12,14 @@ import Link from 'next/link';
 import type { ClubData } from '@/lib/clubs-data';
 import { WA_NUMBER } from '@/lib/whatsapp';
 import { getAmenityIcon } from './amenity-icons';
+
+/* ─── High-quality image URL builder (Next.js Image Optimization) ─── */
+function getHdSrc(src: string): string {
+  /* External URLs: use as-is */
+  if (src.startsWith('http')) return src;
+  /* Local images: route through Next.js optimizer at max quality */
+  return `/_next/image?url=${encodeURIComponent(src)}&w=3840&q=95`;
+}
 
 /* ─── WhatsApp Message Builder ─── */
 function encodeWa(text: string): string {
@@ -573,7 +581,7 @@ function Lightbox({
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={images[current].src}
+                  src={getHdSrc(images[current].src)}
                   alt={images[current].alt}
                   className="max-w-full max-h-full object-contain rounded-lg shadow-2xl select-none"
                   draggable={false}
