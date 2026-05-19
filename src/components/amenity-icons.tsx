@@ -86,6 +86,7 @@ const ICON_MAP: IconMatch[] = [
 
   /* ── Hotel y hospedaje ── */
   { keywords: ['hotel', 'hostal', 'alojamiento', 'hospedaje'], Icon: MdHotel },
+  { keywords: ['saltarina', 'trampolín', 'trampolin', 'inflable', 'castillo hinchable'], Icon: GiKidSlide },
   { keywords: ['cama', 'bed', 'dormitorio', 'habitaci', 'cuarto'], Icon: MdBed },
 
   /* ── Transporte de pasajeros ── */
