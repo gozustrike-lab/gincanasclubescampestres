@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     template: "%s — Gincanas Clubes Campestres",
   },
   description:
-    "Más de 15 años conectando a las mejores organizaciones con nuestros 8 clubes campestres exclusivos. Seguridad, logística integral y experiencias inolvidables para corporativos, universidades y colegios.",
+    "Más de 15 años conectando a las mejores organizaciones con nuestros 14 clubes campestres exclusivos. Seguridad, logística integral y experiencias inolvidables para corporativos, universidades y colegios.",
   keywords: [
     "Gincanas",
     "Clubes Campestres",
@@ -41,9 +41,22 @@ export const metadata: Metadata = {
     "Paseo Escolar Lima",
   ],
   authors: [{ name: "Gincanas Clubes Campestres" }],
+  creator: "Gincanas Clubes Campestres",
+  publisher: "Gincanas Clubes Campestres",
   icons: {
     icon: "/images/logo-icon.webp",
     apple: "/images/logo-icon.webp",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
   openGraph: {
     title: "Gincanas Clubes Campestres | Eventos para Instituciones Élite",
@@ -60,6 +73,7 @@ export const metadata: Metadata = {
         height: 630,
         alt: "Gincanas Clubes Campestres — 14 Clubes Exclusivos para Eventos de Alto Impacto",
         type: "image/png",
+        secureUrl: "https://gincanasclubescampestres.com/og-gincanas.png",
       },
     ],
   },
@@ -69,6 +83,15 @@ export const metadata: Metadata = {
     description:
       "Red de 14 clubes campestres exclusivos. Gestión de eventos de alto impacto para corporativos, colegios y universidades.",
     images: ["/og-gincanas.png"],
+    site: "@gincanaspe",
+  },
+  other: {
+    "fb:app_id": "",
+    "og:image:secure_url": "https://gincanasclubescampestres.com/og-gincanas.png",
+    "og:image:width": "1200",
+    "og:image:height": "630",
+    "og:image:type": "image/png",
+    "whatsapp:image": "https://gincanasclubescampestres.com/og-gincanas.png",
   },
   alternates: {
     canonical: "https://gincanasclubescampestres.com",
