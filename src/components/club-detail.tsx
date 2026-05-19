@@ -1,9 +1,10 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   MapPin, MessageCircle, Bus, Building2,
-  ArrowRight, ChevronRight, Home, CheckCircle2, Sparkles,
+  ArrowRight, ChevronRight, Home, CheckCircle2, Sparkles, X,
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -26,9 +27,103 @@ function clubWaLink(club: ClubData, type: 'club' | 'transporte' | 'ambos') {
 }
 
 /* ═══════════════════════════════════════════════════════
+   CINEMATIC LIGHTBOX — Full-screen image viewer
+   ═══════════════════════════════════════════════════════ */
+function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
+  /* Lock body scroll */
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, []);
+
+  /* Escape key */
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  return (
+    <AnimatePresence>
+      {/* Backdrop */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="fixed inset-0 z-[99999] bg-black/90"
+        style={{
+          backdropFilter: 'blur(20px) saturate(1.2)',
+          WebkitBackdropFilter: 'blur(20px) saturate(1.2)',
+        }}
+        onClick={onClose}
+      />
+
+      {/* Close button */}
+      <motion.button
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.8 }}
+        transition={{ duration: 0.2, delay: 0.05 }}
+        onClick={onClose}
+        className="fixed top-5 right-5 z-[100001] w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-all duration-150 backdrop-blur-md border border-white/10"
+        aria-label="Cerrar imagen"
+      >
+        <X className="w-5 h-5" strokeWidth={2} />
+      </motion.button>
+
+      {/* Image container */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.85, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.9, y: 10 }}
+        transition={{
+          duration: 0.35,
+          ease: [0.25, 0.46, 0.45, 0.94],
+        }}
+        className="fixed inset-0 z-[100000] flex items-center justify-center px-4 py-20 md:px-12 md:py-16"
+        onClick={onClose}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={src}
+          alt={alt}
+          className="max-w-full max-h-full object-contain rounded-lg shadow-2xl cursor-zoom-out select-none"
+          draggable={false}
+          onClick={(e) => e.stopPropagation()}
+        />
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
    CLUB DETAIL — Full-page immersive club page
    ═══════════════════════════════════════════════════════ */
 export default function ClubDetail({ club }: { club: ClubData }) {
+  const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
+  const [lightboxAlt, setLightboxAlt] = useState('');
+
+  const openLightbox = useCallback((src: string, alt: string) => {
+    setLightboxSrc(src);
+    setLightboxAlt(alt);
+  }, []);
+
+  const closeLightbox = useCallback(() => {
+    setLightboxSrc(null);
+  }, []);
+
+  /* All clickable images: hero + gallery */
+  const allImages: { src: string; alt: string }[] = [
+    { src: club.image, alt: club.name },
+    ...(club.gallery || []).map((img, idx) => ({
+      src: img,
+      alt: `${club.name} — Galería ${idx + 1}`,
+    })),
+  ];
+
   return (
     <div
       className="min-h-screen"
@@ -59,8 +154,11 @@ export default function ClubDetail({ club }: { club: ClubData }) {
         </nav>
       </div>
 
-      {/* ── Hero Image ── */}
-      <div className="relative w-full h-[40vh] sm:h-[45vh] md:h-[50vh] overflow-hidden mt-4">
+      {/* ── Hero Image (clickable) ── */}
+      <div
+        className="relative w-full h-[40vh] sm:h-[45vh] md:h-[50vh] overflow-hidden mt-4 cursor-zoom-in group"
+        onClick={() => openLightbox(club.image, club.name)}
+      >
         <div className={`absolute inset-0 bg-gradient-to-br ${club.gradient}`} />
         <Image
           src={club.image}
@@ -68,12 +166,19 @@ export default function ClubDetail({ club }: { club: ClubData }) {
           fill
           priority
           quality={90}
-          className="object-cover"
+          className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
           sizes="100vw"
         />
         {/* Gradient overlays */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#022c22] via-transparent to-black/30" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent" />
+
+        {/* Zoom indicator */}
+        <div className="absolute top-4 right-4 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-black/30 backdrop-blur-sm border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          <svg className="w-4 h-4 text-white/80" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607ZM10.5 7.5v6m3-3h-6" />
+          </svg>
+        </div>
 
         {/* Club Name Overlay */}
         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
@@ -106,8 +211,9 @@ export default function ClubDetail({ club }: { club: ClubData }) {
             {club.gallery.map((img, idx) => (
               <div
                 key={idx}
-                className="relative overflow-hidden rounded-xl"
+                className="relative overflow-hidden rounded-xl cursor-zoom-in group/img"
                 style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.25)' }}
+                onClick={() => openLightbox(img, `${club.name} — Galería ${idx + 1}`)}
               >
                 <div className="aspect-[16/10]">
                   <Image
@@ -115,9 +221,19 @@ export default function ClubDetail({ club }: { club: ClubData }) {
                     alt={`${club.name} — Galería ${idx + 1}`}
                     fill
                     quality={90}
-                    className="object-cover"
+                    className="object-cover transition-transform duration-300 group-hover/img:scale-[1.05]"
                     sizes="(max-width: 640px) 50vw, 400px"
                   />
+                </div>
+                {/* Hover zoom indicator */}
+                <div className="absolute inset-0 bg-black/0 group-hover/img:bg-black/20 transition-colors duration-200 flex items-center justify-center">
+                  <div className="opacity-0 group-hover/img:opacity-100 transition-opacity duration-200">
+                    <div className="w-10 h-10 flex items-center justify-center rounded-full bg-white/15 backdrop-blur-md border border-white/20">
+                      <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607ZM10.5 7.5v6m3-3h-6" />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
@@ -263,6 +379,13 @@ export default function ClubDetail({ club }: { club: ClubData }) {
           <div className="h-12 md:h-16" />
         </div>
       </div>
+
+      {/* ── Lightbox ── */}
+      <AnimatePresence>
+        {lightboxSrc && (
+          <Lightbox src={lightboxSrc} alt={lightboxAlt} onClose={closeLightbox} />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
