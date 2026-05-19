@@ -8,12 +8,12 @@ import React from 'react';
 import { MdPool, MdForest, MdWaves, MdSportsSoccer, MdOutdoorGrill,
          MdDirectionsBoat, MdHotel, MdSportsMotorsports,
          MdCalendarViewMonth, MdLocalParking, MdSecurity, MdNature,
-         MdEmojiEvents, MdSetMeal, MdBed } from 'react-icons/md';
+         MdEmojiEvents, MdSetMeal, MdBed, MdChildFriendly } from 'react-icons/md';
 import { GiCampfire, GiChicken, GiCarousel, GiSpinningWheel,
          GiForestCamp, GiKidSlide, GiSheep, GiPig,
-         GiFarmTractor, GiDogHouse } from 'react-icons/gi';
+         GiFarmTractor, GiDogHouse, GiCrosshair } from 'react-icons/gi';
 import { FaHorse, FaCableCar, FaTent, FaBus, FaCow,
-         FaMountain, FaTree, FaPersonSwimming } from 'react-icons/fa6';
+         FaMountain, FaTree, FaPersonSwimming, FaBinoculars } from 'react-icons/fa6';
 import { TbCampfireFilled, TbSwimming, TbHorse,
          TbKayak, TbMountainFilled,
          TbPlant, TbBed } from 'react-icons/tb';
@@ -117,6 +117,12 @@ const ICON_MAP: IconMatch[] = [
   /* ── Natación/kayak/pesca específicos ── */
   { keywords: ['natación', 'swimming'], Icon: TbSwimming },
   { keywords: ['pesca', 'fishing', 'pescar'], Icon: MdDirectionsBoat },
+
+  /* ── Actividades especiales ── */
+  { keywords: ['paintball'], Icon: GiCrosshair },
+  { keywords: ['infantil', 'niño', 'niños', 'niña', 'bebe'], Icon: MdChildFriendly },
+  { keywords: ['mirador', 'mirador panorámico', 'panorámica', 'panoramico', 'vista'], Icon: FaBinoculars },
+  { keywords: ['losa'], Icon: MdSportsSoccer },
 ];
 
 /* ── Default icon ── */

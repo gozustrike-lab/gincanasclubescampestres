@@ -111,12 +111,30 @@ export const CLUBS: ClubData[] = [
     slug: 'club-ricardo-palma',
     name: 'Club Ricardo Palma',
     shortName: 'Ricardo Palma',
-    location: 'Lima',
+    location: 'Km 41 Carretera Central — Chosica',
     description:
-      'Espacio amplio y tradicional, adecuado para eventos y reuniones grupales de gran envergadura. Su infraestructura versátil permite adaptarse a todo tipo de celebraciones corporativas y sociales.',
-    features: ['Salón de eventos', 'Áreas amplias', 'Deportes', 'Estacionamiento'],
+      'Ubicado en el Km 41 de la Carretera Central, a solo 10 minutos de Chosica. Un espacio amplio con mirador panorámico, piscinas, áreas verdes y canchas deportivas pensadas para el entretenimiento de toda la familia. El ingreso incluye acceso libre a todas las instalaciones principales. Ideal para eventos corporativos, integraciones, paseos escolares y celebraciones especiales con vista panorámica a los alrededores.',
+    features: ['Piscinas', 'Mirador panorámico', 'Áreas verdes', 'Deportes'],
     image: '/images/clubes/club-ricardo-palma.webp',
     gradient: 'from-emerald-deep to-emerald-deep/80',
+    gallery: [
+      '/images/clubes/club-ricardo-palma-galeria-1.webp',
+      '/images/clubes/club-ricardo-palma-galeria-2.webp',
+      '/images/clubes/club-ricardo-palma-galeria-3.webp',
+    ],
+    included: [
+      '02 piscinas para adultos y niños',
+      'Amplias áreas verdes',
+      'Juegos infantiles',
+      'Losa y canchas deportivas',
+      'Mirador panorámico',
+      'Zonas de parrilla',
+    ],
+    extraActivities: [
+      'Paseos en bote',
+      'Cuatrimotos',
+      'Paintball',
+    ],
   },
   {
     slug: 'club-samaña',
