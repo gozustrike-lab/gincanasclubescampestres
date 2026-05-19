@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import {
   MapPin, MessageCircle, Bus, Building2,
   ArrowRight, ChevronRight, Home, CheckCircle2, Sparkles, X,
+  ChevronLeft,
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -28,22 +29,89 @@ function clubWaLink(club: ClubData, type: 'club' | 'transporte' | 'ambos') {
 
 /* ═══════════════════════════════════════════════════════
    CINEMATIC LIGHTBOX — Full-screen image viewer
+   Swipe on mobile (Instagram-style), arrows on both sides
    ═══════════════════════════════════════════════════════ */
-function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
+
+const SWIPE_THRESHOLD = 50;
+
+/* Slide variants */
+const slideVariants = {
+  enter: (dir: number) => ({
+    x: dir > 0 ? 300 : -300,
+    opacity: 0,
+    scale: 0.92,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+  },
+  exit: (dir: number) => ({
+    x: dir > 0 ? -300 : 300,
+    opacity: 0,
+    scale: 0.92,
+  }),
+};
+
+const slideTransition = {
+  type: 'spring' as const,
+  stiffness: 350,
+  damping: 32,
+  mass: 0.8,
+};
+
+function Lightbox({
+  images,
+  startIndex,
+  onClose,
+}: {
+  images: { src: string; alt: string }[];
+  startIndex: number;
+  onClose: () => void;
+}) {
+  const [current, setCurrent] = useState(startIndex);
+  const [direction, setDirection] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+
   /* Lock body scroll */
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = ''; };
   }, []);
 
-  /* Escape key */
+  /* Keyboard nav */
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowRight') navigate(1);
+      if (e.key === 'ArrowLeft') navigate(-1);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [onClose]);
+  }, [current, images.length]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const navigate = useCallback(
+    (dir: number) => {
+      const next = current + dir;
+      if (next >= 0 && next < images.length) {
+        setDirection(dir);
+        setCurrent(next);
+      }
+    },
+    [current, images.length],
+  );
+
+  /* Swipe handler (Instagram-style) */
+  const onDragEnd = useCallback(
+    (_e: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+      if (info.offset.x < -SWIPE_THRESHOLD) navigate(1);
+      else if (info.offset.x > SWIPE_THRESHOLD) navigate(-1);
+    },
+    [navigate],
+  );
+
+  const hasPrev = current > 0;
+  const hasNext = current < images.length - 1;
 
   return (
     <AnimatePresence>
@@ -53,48 +121,137 @@ function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: ()
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
-        className="fixed inset-0 z-[99999] bg-black/90"
+        className="fixed inset-0 z-[99999] bg-black/95"
         style={{
-          backdropFilter: 'blur(20px) saturate(1.2)',
-          WebkitBackdropFilter: 'blur(20px) saturate(1.2)',
+          backdropFilter: 'blur(30px) saturate(1.3)',
+          WebkitBackdropFilter: 'blur(30px) saturate(1.3)',
         }}
         onClick={onClose}
       />
 
-      {/* Close button */}
-      <motion.button
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.8 }}
-        transition={{ duration: 0.2, delay: 0.05 }}
-        onClick={onClose}
-        className="fixed top-5 right-5 z-[100001] w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-all duration-150 backdrop-blur-md border border-white/10"
-        aria-label="Cerrar imagen"
-      >
-        <X className="w-5 h-5" strokeWidth={2} />
-      </motion.button>
-
-      {/* Image container */}
+      {/* Top bar: close + counter */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.85, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.9, y: 10 }}
-        transition={{
-          duration: 0.35,
-          ease: [0.25, 0.46, 0.45, 0.94],
-        }}
-        className="fixed inset-0 z-[100000] flex items-center justify-center px-4 py-20 md:px-12 md:py-16"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.25, delay: 0.05 }}
+        className="fixed top-0 left-0 right-0 z-[100001] flex items-center justify-between px-4 py-4 safe-top"
+      >
+        {/* Counter pill */}
+        <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/[0.08] rounded-full px-3.5 py-1.5">
+          <span className="text-white/90 text-xs font-semibold tabular-nums">
+            {current + 1}
+          </span>
+          <span className="text-white/30 text-xs">/</span>
+          <span className="text-white/50 text-xs tabular-nums">
+            {images.length}
+          </span>
+        </div>
+
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-all duration-150 backdrop-blur-md border border-white/[0.08] active:scale-90"
+          aria-label="Cerrar"
+        >
+          <X className="w-[18px] h-[18px]" strokeWidth={2.5} />
+        </button>
+      </motion.div>
+
+      {/* Left arrow */}
+      <AnimatePresence>
+        {hasPrev && (
+          <motion.button
+            initial={{ opacity: 0, x: -12 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -12 }}
+            transition={{ duration: 0.2, delay: 0.1 }}
+            onClick={(e) => { e.stopPropagation(); navigate(-1); }}
+            className="fixed left-2 sm:left-4 top-1/2 -translate-y-1/2 z-[100002] w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-full bg-white/[0.08] hover:bg-white/[0.15] active:bg-white/[0.2] text-white/70 hover:text-white transition-all duration-150 backdrop-blur-md border border-white/[0.06] active:scale-90"
+            aria-label="Imagen anterior"
+          >
+            <ChevronLeft className="w-5 h-5" strokeWidth={2} />
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Right arrow */}
+      <AnimatePresence>
+        {hasNext && (
+          <motion.button
+            initial={{ opacity: 0, x: 12 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 12 }}
+            transition={{ duration: 0.2, delay: 0.1 }}
+            onClick={(e) => { e.stopPropagation(); navigate(1); }}
+            className="fixed right-2 sm:right-4 top-1/2 -translate-y-1/2 z-[100002] w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-full bg-white/[0.08] hover:bg-white/[0.15] active:bg-white/[0.2] text-white/70 hover:text-white transition-all duration-150 backdrop-blur-md border border-white/[0.06] active:scale-90"
+            aria-label="Siguiente imagen"
+          >
+            <ChevronRight className="w-5 h-5" strokeWidth={2} />
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Swipeable image container */}
+      <div
+        ref={containerRef}
+        className="fixed inset-0 z-[100000] flex items-center justify-center px-3 py-16 sm:px-8 sm:py-16 md:px-16"
         onClick={onClose}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={src}
-          alt={alt}
-          className="max-w-full max-h-full object-contain rounded-lg shadow-2xl cursor-zoom-out select-none"
-          draggable={false}
-          onClick={(e) => e.stopPropagation()}
-        />
-      </motion.div>
+        <AnimatePresence initial={false} custom={direction} mode="popLayout">
+          <motion.div
+            key={current}
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={slideTransition}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={{ left: 0.25, right: 0.25 }}
+            onDragEnd={onDragEnd}
+            className="w-full h-full flex items-center justify-center cursor-grab active:cursor-grabbing"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={images[current].src}
+              alt={images[current].alt}
+              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl select-none pointer-events-none"
+              draggable={false}
+            />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Bottom dots indicator */}
+      {images.length > 1 && (
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 16 }}
+          transition={{ duration: 0.25, delay: 0.15 }}
+          className="fixed bottom-5 sm:bottom-6 left-1/2 -translate-x-1/2 z-[100001] flex items-center gap-1.5 bg-white/[0.06] backdrop-blur-md border border-white/[0.06] rounded-full px-3 py-2"
+        >
+          {images.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={(e) => {
+                e.stopPropagation();
+                setDirection(idx > current ? 1 : -1);
+                setCurrent(idx);
+              }}
+              className={`rounded-full transition-all duration-200 ${
+                idx === current
+                  ? 'w-5 h-2 bg-white/90'
+                  : 'w-2 h-2 bg-white/25 hover:bg-white/45'
+              }`}
+              aria-label={`Ir a imagen ${idx + 1}`}
+            />
+          ))}
+        </motion.div>
+      )}
     </AnimatePresence>
   );
 }
@@ -103,17 +260,8 @@ function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: ()
    CLUB DETAIL — Full-page immersive club page
    ═══════════════════════════════════════════════════════ */
 export default function ClubDetail({ club }: { club: ClubData }) {
-  const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
-  const [lightboxAlt, setLightboxAlt] = useState('');
-
-  const openLightbox = useCallback((src: string, alt: string) => {
-    setLightboxSrc(src);
-    setLightboxAlt(alt);
-  }, []);
-
-  const closeLightbox = useCallback(() => {
-    setLightboxSrc(null);
-  }, []);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxStartIndex, setLightboxStartIndex] = useState(0);
 
   /* All clickable images: hero + gallery */
   const allImages: { src: string; alt: string }[] = [
@@ -123,6 +271,15 @@ export default function ClubDetail({ club }: { club: ClubData }) {
       alt: `${club.name} — Galería ${idx + 1}`,
     })),
   ];
+
+  const openLightbox = useCallback((index: number) => {
+    setLightboxStartIndex(index);
+    setLightboxOpen(true);
+  }, []);
+
+  const closeLightbox = useCallback(() => {
+    setLightboxOpen(false);
+  }, []);
 
   return (
     <div
@@ -157,7 +314,7 @@ export default function ClubDetail({ club }: { club: ClubData }) {
       {/* ── Hero Image (clickable) ── */}
       <div
         className="relative w-full h-[40vh] sm:h-[45vh] md:h-[50vh] overflow-hidden mt-4 cursor-zoom-in group"
-        onClick={() => openLightbox(club.image, club.name)}
+        onClick={() => openLightbox(0)}
       >
         <div className={`absolute inset-0 bg-gradient-to-br ${club.gradient}`} />
         <Image
@@ -173,12 +330,17 @@ export default function ClubDetail({ club }: { club: ClubData }) {
         <div className="absolute inset-0 bg-gradient-to-t from-[#022c22] via-transparent to-black/30" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent" />
 
-        {/* Zoom indicator */}
-        <div className="absolute top-4 right-4 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-black/30 backdrop-blur-sm border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-          <svg className="w-4 h-4 text-white/80" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607ZM10.5 7.5v6m3-3h-6" />
-          </svg>
-        </div>
+        {/* Image count badge (if gallery exists) */}
+        {allImages.length > 1 && (
+          <div className="absolute top-4 right-4 z-10 flex items-center gap-1.5 bg-black/40 backdrop-blur-sm border border-white/10 px-2.5 py-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <svg className="w-3.5 h-3.5 text-white/70" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <path d="m21 15-5-5L5 21" />
+            </svg>
+            <span className="text-white/80 text-[11px] font-medium">{allImages.length}</span>
+          </div>
+        )}
 
         {/* Club Name Overlay */}
         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
@@ -213,7 +375,7 @@ export default function ClubDetail({ club }: { club: ClubData }) {
                 key={idx}
                 className="relative overflow-hidden rounded-xl cursor-zoom-in group/img"
                 style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.25)' }}
-                onClick={() => openLightbox(img, `${club.name} — Galería ${idx + 1}`)}
+                onClick={() => openLightbox(idx + 1)} // +1 because hero is index 0
               >
                 <div className="aspect-[16/10]">
                   <Image
@@ -225,7 +387,7 @@ export default function ClubDetail({ club }: { club: ClubData }) {
                     sizes="(max-width: 640px) 50vw, 400px"
                   />
                 </div>
-                {/* Hover zoom indicator */}
+                {/* Hover overlay */}
                 <div className="absolute inset-0 bg-black/0 group-hover/img:bg-black/20 transition-colors duration-200 flex items-center justify-center">
                   <div className="opacity-0 group-hover/img:opacity-100 transition-opacity duration-200">
                     <div className="w-10 h-10 flex items-center justify-center rounded-full bg-white/15 backdrop-blur-md border border-white/20">
@@ -382,8 +544,12 @@ export default function ClubDetail({ club }: { club: ClubData }) {
 
       {/* ── Lightbox ── */}
       <AnimatePresence>
-        {lightboxSrc && (
-          <Lightbox src={lightboxSrc} alt={lightboxAlt} onClose={closeLightbox} />
+        {lightboxOpen && (
+          <Lightbox
+            images={allImages}
+            startIndex={lightboxStartIndex}
+            onClose={closeLightbox}
+          />
         )}
       </AnimatePresence>
     </div>
