@@ -17,8 +17,8 @@ import { getAmenityIcon } from './amenity-icons';
 function getHdSrc(src: string): string {
   /* External URLs: use as-is */
   if (src.startsWith('http')) return src;
-  /* Local images: route through Next.js optimizer, quality 95 */
-  return `/_next/image?url=${encodeURIComponent(src)}&q=95`;
+  /* Local images: route through Next.js optimizer at max resolution */
+  return `/_next/image?url=${encodeURIComponent(src)}&w=3840&q=95`;
 }
 
 /* ─── WhatsApp Message Builder ─── */
