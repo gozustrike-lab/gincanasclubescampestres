@@ -29,7 +29,6 @@ export const CLUBS: ClubData[] = [
     image: '/images/clubes/club-certse.webp',
     gradient: 'from-emerald-deep to-emerald-dark',
     gallery: [
-      '/images/clubes/club-certse-galeria-1.webp',
       '/images/clubes/club-certse-galeria-2.webp',
     ],
     included: [
@@ -58,7 +57,6 @@ export const CLUBS: ClubData[] = [
     image: '/images/clubes/club-arrayanes.webp',
     gradient: 'from-emerald-deep/90 to-emerald-dark',
     gallery: [
-      '/images/clubes/club-arrayanes-galeria-1.webp',
       '/images/clubes/club-arrayanes-galeria-2.webp',
       '/images/clubes/club-arrayanes-galeria-3.webp',
     ],
@@ -88,7 +86,6 @@ export const CLUBS: ClubData[] = [
     image: '/images/clubes/club-toboganes.webp',
     gradient: 'from-gold/90 to-gold-dark',
     gallery: [
-      '/images/clubes/club-toboganes-galeria-1.webp',
       '/images/clubes/club-toboganes-galeria-2.webp',
       '/images/clubes/club-toboganes-galeria-3.webp',
     ],
